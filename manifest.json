@@ -2,12 +2,20 @@
   "name": "Lisossomo Survivors",
   "short_name": "Lisossomo",
   "start_url": "./index.html",
-  "display": "fullscreen",
-  "background_color": "#06061a",
-  "theme_color": "#7c3aed",
+  "display": "standalone",
+  "background_color": "#04040f",
+  "theme_color": "#04040f",
   "orientation": "portrait",
   "icons": [
-    {"src": "icon-192.png","sizes": "192x192","type": "image/png"},
-    {"src": "icon-512.png","sizes": "512x512","type": "image/png"}
+    {
+      "src": "icon.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
   ]
 }
