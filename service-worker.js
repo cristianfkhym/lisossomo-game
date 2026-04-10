@@ -1,4 +1,4 @@
-const CACHE_NAME = 'lisossomo-v1';
+const CACHE_NAME = 'lisossomo-v5';
 
 self.addEventListener('install', (event) => {
   event.waitUntil(

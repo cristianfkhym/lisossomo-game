@@ -7,88 +7,147 @@
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#04040f">
 <link rel="apple-touch-icon" href="icon.png">
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
-html,body{width:100%;height:100%;overflow:hidden;background:#04040f;font-family:'Exo 2',sans-serif;touch-action:none;user-select:none;}
+html,body{width:100%;height:100%;overflow:hidden;background:#04040f;font-family:'Nunito',sans-serif;touch-action:none;user-select:none;-webkit-user-select:none;}
 canvas{display:block;position:fixed;inset:0;}
 
 /* ── HUD ── */
-#hud{position:fixed;top:0;left:0;right:0;z-index:10;pointer-events:none;padding:env(safe-area-inset-top,8px) 10px 0;}
-#hudRow{display:flex;align-items:flex-start;justify-content:space-between;gap:4px;}
+#hud{position:fixed;top:0;left:0;right:0;z-index:10;pointer-events:none;
+     padding:max(env(safe-area-inset-top),8px) 10px 6px;}
+#hudRow{display:flex;align-items:flex-start;justify-content:space-between;gap:6px;}
 .hbar{flex:1;min-width:0;}
-.hlbl{font-family:'Orbitron',monospace;font-size:8px;letter-spacing:1.5px;color:#a78bfa;margin-bottom:2px;white-space:nowrap;}
-.htrack{height:11px;background:rgba(10,10,40,0.85);border-radius:6px;overflow:hidden;border:1px solid rgba(139,92,246,0.4);}
-.hfill{height:100%;border-radius:6px;transition:width 0.18s;}
+.hlbl{font-family:'Orbitron',monospace;font-size:9px;letter-spacing:1px;
+      color:#a78bfa;margin-bottom:3px;white-space:nowrap;font-weight:700;}
+.htrack{height:14px;background:rgba(8,8,36,0.88);border-radius:7px;
+        overflow:hidden;border:1px solid rgba(139,92,246,0.45);}
+.hfill{height:100%;border-radius:7px;transition:width 0.18s;}
 #hpFill{background:linear-gradient(90deg,#6d28d9,#c084fc);}
 #expFill{background:linear-gradient(90deg,#0369a1,#38bdf8);width:0%;}
-.hval{font-size:9px;color:#c4b5fd;margin-top:2px;font-family:'Exo 2',sans-serif;}
+.hval{font-size:12px;color:#c4b5fd;margin-top:2px;font-family:'Nunito',sans-serif;font-weight:800;}
 #hudCenter{text-align:center;padding:0 4px;flex-shrink:0;}
-#timerTxt{font-family:'Orbitron',monospace;font-size:20px;font-weight:900;color:#f0abfc;text-shadow:0 0 14px #a855f7,0 0 28px #7c3aed44;}
-#lvlTxt{font-family:'Orbitron',monospace;font-size:10px;color:#c4b5fd;margin-top:1px;}
-#killTxt{font-size:9px;color:#86efac;margin-top:1px;font-family:'Exo 2',sans-serif;}
-.hbar.right{text-align:right;}
+#timerTxt{font-family:'Orbitron',monospace;font-size:26px;font-weight:900;
+          color:#f0abfc;text-shadow:0 0 16px #a855f7,0 0 32px #7c3aed55;}
+#lvlTxt{font-family:'Orbitron',monospace;font-size:11px;color:#c4b5fd;margin-top:2px;font-weight:700;}
+#killTxt{font-size:13px;color:#86efac;margin-top:1px;font-family:'Nunito',sans-serif;font-weight:800;}
 .hbar.right .hlbl{text-align:right;}
 .hbar.right .hval{text-align:right;}
 
-/* mute btn no canto direito abaixo do XP */
-#muteBtn{position:fixed;top:env(safe-area-inset-top,8px);right:10px;margin-top:52px;z-index:30;background:rgba(30,27,75,0.9);border:1px solid #4c1d95;border-radius:8px;color:#c4b5fd;font-size:11px;font-family:'Exo 2',sans-serif;padding:5px 10px;cursor:pointer;pointer-events:all;-webkit-tap-highlight-color:transparent;}
-
 /* ── BOSS BAR ── */
-#bossBar{position:fixed;top:70px;left:50%;transform:translateX(-50%);width:min(280px,80vw);display:none;z-index:20;text-align:center;pointer-events:none;}
-#bossBarName{font-family:'Orbitron',monospace;font-size:10px;color:#f87171;margin-bottom:3px;letter-spacing:1px;text-shadow:0 0 8px #dc2626;}
-#bossBarTrack{height:10px;background:rgba(10,10,40,0.9);border-radius:5px;overflow:hidden;border:1px solid #7f1d1d;}
-#bossBarFill{height:100%;background:linear-gradient(90deg,#7f1d1d,#ef4444,#fca5a5);border-radius:5px;transition:width 0.1s;}
+#bossBar{position:fixed;top:max(env(safe-area-inset-top),8px);top:72px;
+         left:50%;transform:translateX(-50%);
+         width:min(300px,82vw);display:none;z-index:20;text-align:center;pointer-events:none;}
+#bossBarName{font-family:'Orbitron',monospace;font-size:11px;color:#f87171;
+             margin-bottom:4px;letter-spacing:1px;text-shadow:0 0 10px #dc2626;font-weight:700;}
+#bossBarTrack{height:11px;background:rgba(8,8,36,0.92);border-radius:6px;
+              overflow:hidden;border:1px solid #7f1d1d;}
+#bossBarFill{height:100%;background:linear-gradient(90deg,#7f1d1d,#ef4444,#fca5a5);
+             border-radius:6px;transition:width 0.1s;}
 
-/* ── JOYSTICK ── */
-#joyZone{position:fixed;bottom:max(env(safe-area-inset-bottom,0px),16px);left:16px;z-index:20;touch-action:none;}
-#joyBase{width:100px;height:100px;border-radius:50%;background:rgba(109,40,217,0.12);border:2px solid rgba(167,139,250,0.35);position:relative;}
-#joyKnob{width:44px;height:44px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#a78bfa,#6d28d9);border:2px solid #c4b5fd;box-shadow:0 0 12px #7c3aed88;position:absolute;left:28px;top:28px;pointer-events:none;}
+/* ── JOYSTICK (posicionado dinamicamente via JS) ── */
+#joyBase{position:fixed;width:108px;height:108px;border-radius:50%;
+         background:rgba(109,40,217,0.14);border:2.5px solid rgba(167,139,250,0.4);
+         z-index:20;pointer-events:none;opacity:0.4;transition:opacity 0.15s;}
+#joyKnob{position:absolute;width:48px;height:48px;border-radius:50%;
+         background:radial-gradient(circle at 35% 35%,#a78bfa,#6d28d9);
+         border:2px solid #c4b5fd;box-shadow:0 0 14px #7c3aed99;
+         left:30px;top:30px;pointer-events:none;}
 
 /* ── BIO BOX ── */
-#bioBox{position:fixed;bottom:max(env(safe-area-inset-bottom,0px),16px);right:10px;width:min(155px,38vw);background:rgba(6,6,28,0.92);border:1px solid #4c1d95;border-radius:10px;padding:8px;font-size:10px;color:#c4b5fd;z-index:20;line-height:1.5;pointer-events:none;font-family:'Exo 2',sans-serif;}
-#bioBox strong{color:#c084fc;font-size:10px;font-family:'Orbitron',monospace;font-weight:700;}
+#bioBox{position:fixed;bottom:max(env(safe-area-inset-bottom),16px);right:10px;
+        width:min(158px,40vw);background:rgba(6,6,28,0.93);
+        border:1px solid #4c1d95;border-radius:12px;padding:10px;
+        font-size:12px;color:#c4b5fd;z-index:20;line-height:1.55;pointer-events:none;}
+#bioBox strong{color:#c084fc;font-size:11px;font-family:'Orbitron',monospace;font-weight:700;}
+
+/* ── MUTE ── */
+#muteBtn{position:fixed;bottom:max(env(safe-area-inset-bottom),16px);
+         left:50%;transform:translateX(-50%);
+         z-index:30;background:rgba(20,15,60,0.93);
+         border:1.5px solid #4c1d95;border-radius:22px;color:#c4b5fd;
+         font-size:15px;font-family:'Nunito',sans-serif;font-weight:700;
+         padding:8px 20px;cursor:pointer;pointer-events:all;
+         -webkit-tap-highlight-color:transparent;letter-spacing:1px;}
 
 /* ── BOSS ALERT ── */
-#bossAlert{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(100,15,15,0.97);border:2px solid #ef4444;border-radius:14px;padding:14px 26px;font-size:18px;font-weight:900;font-family:'Orbitron',monospace;color:#fff;z-index:60;display:none;text-align:center;pointer-events:none;animation:bpulse 0.35s ease infinite alternate;}
-@keyframes bpulse{from{box-shadow:0 0 18px #dc2626;}to{box-shadow:0 0 50px #f87171,0 0 80px #dc262644;}}
+#bossAlert{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);
+           background:rgba(100,15,15,0.97);border:2px solid #ef4444;
+           border-radius:16px;padding:16px 30px;
+           font-size:20px;font-weight:900;font-family:'Orbitron',monospace;
+           color:#fff;z-index:60;display:none;text-align:center;pointer-events:none;
+           animation:bpulse 0.35s ease infinite alternate;}
+@keyframes bpulse{from{box-shadow:0 0 20px #dc2626;}to{box-shadow:0 0 55px #f87171,0 0 90px #dc262644;}}
 
 /* ── SCREENS ── */
-.screen{position:fixed;inset:0;background:rgba(2,2,14,0.97);z-index:100;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;text-align:center;overflow-y:auto;}
-.screen h1{font-family:'Orbitron',monospace;font-size:22px;font-weight:900;letter-spacing:2px;text-transform:uppercase;color:#a855f7;text-shadow:0 0 24px #a855f780,0 0 48px #7c3aed40;margin-bottom:8px;}
-.screen .sub{font-size:13px;color:#a78bfa;max-width:380px;line-height:1.65;margin-bottom:14px;font-family:'Exo 2',sans-serif;}
-.icard{background:#080824;border:1px solid #4c1d95;border-radius:12px;padding:14px;max-width:370px;width:100%;font-size:12px;color:#c4b5fd;line-height:1.75;text-align:left;margin-bottom:12px;font-family:'Exo 2',sans-serif;}
-.icard strong{color:#c084fc;font-family:'Orbitron',monospace;font-weight:700;font-size:11px;}
+.screen{position:fixed;inset:0;background:rgba(2,2,14,0.97);z-index:100;
+        display:flex;flex-direction:column;align-items:center;justify-content:center;
+        padding:22px;text-align:center;overflow-y:auto;}
+.screen h1{font-family:'Orbitron',monospace;font-size:26px;font-weight:900;
+           letter-spacing:2px;text-transform:uppercase;color:#a855f7;
+           text-shadow:0 0 28px #a855f788,0 0 52px #7c3aed40;margin-bottom:10px;}
+.screen .sub{font-size:16px;color:#a78bfa;max-width:390px;line-height:1.7;
+             margin-bottom:16px;font-family:'Nunito',sans-serif;font-weight:600;}
+.icard{background:#080824;border:1px solid #4c1d95;border-radius:14px;padding:16px;
+       max-width:380px;width:100%;font-size:14px;color:#c4b5fd;line-height:1.8;
+       text-align:left;margin-bottom:14px;font-family:'Nunito',sans-serif;font-weight:600;}
+.icard strong{color:#c084fc;font-family:'Orbitron',monospace;font-weight:700;font-size:13px;}
 .icard em{color:#86efac;}
-.btn{background:#1a1745;border:1.5px solid #7c3aed;color:#c4b5fd;padding:13px 28px;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;font-family:'Orbitron',monospace;margin:5px;transition:all 0.15s;-webkit-tap-highlight-color:transparent;letter-spacing:1px;}
-.btn:hover,.btn:active{background:#7c3aed;color:#fff;box-shadow:0 0 18px #a855f788;}
+.btn{background:#1a1745;border:2px solid #7c3aed;color:#c4b5fd;
+     padding:16px 34px;border-radius:14px;font-size:18px;font-weight:800;
+     cursor:pointer;font-family:'Orbitron',monospace;margin:7px;
+     transition:all 0.15s;-webkit-tap-highlight-color:transparent;
+     letter-spacing:1px;min-width:210px;display:block;width:min(300px,88vw);}
+.btn:hover,.btn:active{background:#7c3aed;color:#fff;box-shadow:0 0 22px #a855f788;}
 .btn-green{border-color:#22c55e;color:#86efac;background:#052314;}
 .btn-green:hover,.btn-green:active{background:#22c55e;color:#000;}
-.scrollBox{max-height:55vh;overflow-y:auto;background:#070720;border:1px solid #4c1d95;border-radius:12px;padding:14px;max-width:390px;width:100%;font-size:12px;color:#c4b5fd;line-height:1.85;text-align:left;margin:8px 0;font-family:'Exo 2',sans-serif;}
-.scrollBox strong{color:#c084fc;font-family:'Orbitron',monospace;font-size:11px;font-weight:700;}
+.scrollBox{max-height:55vh;overflow-y:auto;background:#070720;border:1px solid #4c1d95;
+           border-radius:14px;padding:16px;max-width:400px;width:100%;
+           font-size:14px;color:#c4b5fd;line-height:1.9;text-align:left;margin:8px 0;
+           font-family:'Nunito',sans-serif;font-weight:600;}
+.scrollBox strong{color:#c084fc;font-family:'Orbitron',monospace;font-size:13px;font-weight:700;}
 .scrollBox em{color:#86efac;}
 .scrollBox b{color:#f0abfc;}
+.credit{margin-top:16px;font-size:13px;color:#6d28d9;font-family:'Nunito',sans-serif;
+        font-weight:700;letter-spacing:0.5px;}
+.credit strong{color:#a78bfa;font-family:'Orbitron',monospace;font-size:12px;font-weight:700;}
 
 /* ── UPGRADE PANEL ── */
-#upgradePanel{position:fixed;inset:0;background:rgba(2,2,14,0.97);z-index:200;display:none;flex-direction:column;align-items:center;justify-content:flex-start;padding:14px;overflow-y:auto;}
-#upHeader{text-align:center;margin-bottom:10px;padding-top:10px;}
-#upHeader h2{font-family:'Orbitron',monospace;font-size:20px;font-weight:900;color:#f0abfc;text-shadow:0 0 18px #a855f7;margin-bottom:4px;}
-#upHeader .upSub{color:#a78bfa;font-size:12px;max-width:380px;margin:0 auto;line-height:1.5;font-family:'Exo 2',sans-serif;}
-#upCurio{background:#0b0b2e;border:1px solid #6d28d9;border-radius:10px;padding:12px;max-width:380px;width:100%;margin:8px 0;font-size:12px;color:#c4b5fd;line-height:1.65;text-align:left;font-family:'Exo 2',sans-serif;}
-#upCurio strong{color:#f0abfc;font-family:'Orbitron',monospace;font-size:10px;}
-.upCard{background:#09092a;border:1.5px solid #3730a3;border-radius:14px;padding:16px;margin:6px 0;width:100%;max-width:380px;cursor:pointer;transition:all 0.15s;-webkit-tap-highlight-color:transparent;}
+#upgradePanel{position:fixed;inset:0;background:rgba(2,2,14,0.97);z-index:200;
+              display:none;flex-direction:column;align-items:center;
+              justify-content:flex-start;padding:14px;overflow-y:auto;}
+#upHeader{text-align:center;margin-bottom:8px;padding-top:8px;}
+#upHeader h2{font-family:'Orbitron',monospace;font-size:22px;font-weight:900;
+             color:#f0abfc;text-shadow:0 0 20px #a855f7;margin-bottom:5px;}
+#upHeader .upSub{color:#a78bfa;font-size:15px;max-width:390px;margin:0 auto;
+                 line-height:1.55;font-family:'Nunito',sans-serif;font-weight:700;}
+#upCurio{background:#0b0b2e;border:1px solid #6d28d9;border-radius:12px;padding:14px;
+         max-width:390px;width:100%;margin:8px 0;font-size:13px;color:#c4b5fd;
+         line-height:1.7;text-align:left;font-family:'Nunito',sans-serif;font-weight:600;}
+#upCurio strong{color:#f0abfc;font-family:'Orbitron',monospace;font-size:11px;font-weight:700;}
+.upCard{background:#09092a;border:2px solid #3730a3;border-radius:16px;padding:18px;
+        margin:7px 0;width:100%;max-width:390px;cursor:pointer;transition:all 0.15s;
+        -webkit-tap-highlight-color:transparent;}
 .upCard:hover,.upCard:active{border-color:#a855f7;background:#14145a;}
-.upTop{display:flex;align-items:center;gap:12px;margin-bottom:8px;}
-.upIcon{width:46px;height:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;border:2px solid;}
-.upTitle{font-family:'Orbitron',monospace;font-size:14px;font-weight:700;line-height:1.2;}
-.upDesc{font-size:13px;color:#c4b5fd;line-height:1.5;font-family:'Exo 2',sans-serif;}
-.upBio{font-size:11px;color:#6d28d9;margin-top:6px;font-style:italic;font-family:'Exo 2',sans-serif;border-top:1px solid #1e1b4b;padding-top:6px;}
+.upTop{display:flex;align-items:center;gap:14px;margin-bottom:10px;}
+.upIcon{width:54px;height:54px;border-radius:50%;display:flex;align-items:center;
+        justify-content:center;font-size:26px;flex-shrink:0;border:2px solid;}
+.upTitle{font-family:'Orbitron',monospace;font-size:15px;font-weight:700;line-height:1.25;}
+.upDesc{font-size:15px;color:#c4b5fd;line-height:1.6;font-family:'Nunito',sans-serif;font-weight:600;}
+.upBio{font-size:12px;color:#818cf8;margin-top:9px;font-style:italic;
+       font-family:'Nunito',sans-serif;border-top:1px solid #1e1b4b;padding-top:8px;font-weight:600;}
 
 /* ── BOSS KILL PANEL ── */
-#bossKillPanel{position:fixed;inset:0;background:rgba(2,2,14,0.98);z-index:250;display:none;flex-direction:column;align-items:center;justify-content:center;padding:20px;}
-#bossKillPanel h2{font-family:'Orbitron',monospace;font-size:18px;font-weight:900;color:#f0abfc;margin-bottom:12px;text-shadow:0 0 16px #a855f7;}
-#bossKillCard{background:#09092a;border:1px solid #7c3aed;border-radius:14px;padding:18px;max-width:390px;width:100%;font-size:12px;color:#c4b5fd;line-height:1.85;text-align:left;font-family:'Exo 2',sans-serif;max-height:55vh;overflow-y:auto;}
-#bossKillCard strong{color:#c084fc;font-family:'Orbitron',monospace;font-size:11px;}
+#bossKillPanel{position:fixed;inset:0;background:rgba(2,2,14,0.98);z-index:250;
+               display:none;flex-direction:column;align-items:center;
+               justify-content:center;padding:22px;}
+#bossKillPanel h2{font-family:'Orbitron',monospace;font-size:22px;font-weight:900;
+                  color:#f0abfc;margin-bottom:14px;text-shadow:0 0 18px #a855f7;}
+#bossKillCard{background:#09092a;border:1px solid #7c3aed;border-radius:16px;
+              padding:20px;max-width:400px;width:100%;font-size:14px;color:#c4b5fd;
+              line-height:1.9;text-align:left;font-family:'Nunito',sans-serif;
+              max-height:55vh;overflow-y:auto;font-weight:600;}
+#bossKillCard strong{color:#c084fc;font-family:'Orbitron',monospace;font-size:13px;font-weight:700;}
 #bossKillCard em{color:#86efac;}
 </style>
 </head>
@@ -101,17 +160,17 @@ canvas{display:block;position:fixed;inset:0;}
     <div class="hbar">
       <div class="hlbl">❤ HP</div>
       <div class="htrack"><div class="hfill" id="hpFill" style="width:100%"></div></div>
-      <div class="hval" id="hpTxt">100/100</div>
+      <div class="hval" id="hpTxt">120/120</div>
     </div>
     <div id="hudCenter">
-      <div id="timerTxt">4:00</div>
+      <div id="timerTxt">2:30</div>
       <div id="lvlTxt">NV 1</div>
       <div id="killTxt">☠ 0</div>
     </div>
     <div class="hbar right">
-      <div class="hlbl">XP ✦</div>
+      <div class="hlbl" style="text-align:right">XP ✦</div>
       <div class="htrack"><div class="hfill" id="expFill"></div></div>
-      <div class="hval" id="expTxt">0%</div>
+      <div class="hval" id="expTxt" style="text-align:right">0%</div>
     </div>
   </div>
 </div>
@@ -121,32 +180,36 @@ canvas{display:block;position:fixed;inset:0;}
   <div id="bossBarTrack"><div id="bossBarFill" style="width:100%"></div></div>
 </div>
 
-<div id="muteBtn" onclick="toggleMute()">🔊</div>
-
-<div id="bossAlert">⚠ BOSS! ⚠<br><span id="bossAlertName" style="font-size:11px;color:#fca5a5;font-family:'Exo 2',sans-serif;font-weight:600;"></span></div>
+<div id="bossAlert">⚠ BOSS! ⚠<br>
+  <span id="bossAlertName" style="font-size:13px;color:#fca5a5;font-family:'Nunito',sans-serif;font-weight:800;"></span>
+</div>
 
 <!-- JOYSTICK -->
-<div id="joyZone"><div id="joyBase"><div id="joyKnob"></div></div></div>
+<div id="joyBase"><div id="joyKnob"></div></div>
 
 <!-- BIO BOX -->
-<div id="bioBox"><strong>LISOSSOMO</strong><br>Organela digestiva com enzimas hidrolíticas. Destrói patógenos e mantém a célula saudável!</div>
+<div id="bioBox"><strong>LISOSSOMO</strong><br>Organela digestiva com enzimas hidrolíticas. Destrói patógenos e mantém a célula viva!</div>
+
+<!-- MUTE -->
+<div id="muteBtn" onclick="toggleMute()">🔊 SOM</div>
 
 <!-- TELA INICIAL -->
 <div class="screen" id="startScreen">
   <h1>🧬 Lisossomo<br>Survivors</h1>
-  <p class="sub">Você é o Lisossomo — a organela defensora da célula animal! Destrua patógenos por 4 minutos. A cada nível, escolha um poder!</p>
+  <p class="sub">Você é o Lisossomo — a organela defensora da célula! Destrua patógenos em 2 min e 30 seg. A cada nível suba de poder!</p>
   <div class="icard">
     <strong>O QUE É O LISOSSOMO?</strong><br>
-    Organela membranosa de células animais, descoberta por <em>Christian de Duve (1955, Nobel 1974)</em>. Com pH interno ~4,5, possui ~50 tipos de enzimas hidrolíticas que digerem bactérias, vírus e organelas danificadas — o "sistema de limpeza" da célula!
+    Organela membranosa de células animais, descoberta por <em>Christian de Duve (1955, Nobel 1974)</em>. Com pH interno ~4,5, possui ~50 tipos de enzimas hidrolíticas que digerem bactérias, vírus e organelas danificadas.
   </div>
   <button class="btn btn-green" id="startBtn">▶ INICIAR JOGO</button>
+  <p class="credit">Criado por <strong>Cristian Gomes Ferreira</strong></p>
 </div>
 
 <!-- UPGRADE PANEL -->
 <div id="upgradePanel">
   <div id="upHeader">
     <h2>✦ NÍVEL ACIMA! ✦</h2>
-    <div class="upSub" id="upSub">O lisossomo está mais forte!</div>
+    <div class="upSub" id="upSub">O lisossomo ficou mais forte!</div>
   </div>
   <div id="upCurio"><strong>💡 CURIOSIDADE:</strong><br><span id="upCurioTxt"></span></div>
   <div id="upCards"></div>
@@ -156,7 +219,7 @@ canvas{display:block;position:fixed;inset:0;}
 <div id="bossKillPanel">
   <h2>🏆 BOSS DERROTADO!</h2>
   <div id="bossKillCard"></div>
-  <button class="btn btn-green" style="margin-top:14px" onclick="closeBossKill()">CONTINUAR →</button>
+  <button class="btn btn-green" style="margin-top:16px" onclick="closeBossKill()">CONTINUAR →</button>
 </div>
 
 <!-- GAME OVER -->
@@ -170,307 +233,220 @@ canvas{display:block;position:fixed;inset:0;}
     Sobreviveu: <strong id="goTime" style="color:#38bdf8">0:00</strong>
   </div>
   <button class="btn btn-green" onclick="location.reload()">▶ TENTAR NOVAMENTE</button>
+  <p class="credit">Criado por <strong>Cristian Gomes Ferreira</strong></p>
 </div>
 
 <!-- VICTORY -->
 <div class="screen" id="victoryScreen" style="display:none">
   <h1>🏆 CÉLULA SALVA!</h1>
-  <p class="sub">O Lisossomo completou sua missão defensiva com sucesso!</p>
+  <p class="sub">O Lisossomo completou sua missão defensiva!</p>
   <div class="scrollBox" id="victoryLesson"></div>
   <button class="btn btn-green" onclick="location.reload()">▶ JOGAR NOVAMENTE</button>
+  <p class="credit">Criado por <strong>Cristian Gomes Ferreira</strong></p>
 </div>
 
 <script>
-// ═══════════════════════════════════════════
-// ÁUDIO — LO-FI MELHORADO
-// ═══════════════════════════════════════════
-let AC=null, masterGain=null, muted=false, musicStarted=false;
+// ═══════════════════════════
+// ÁUDIO LO-FI
+// ═══════════════════════════
+let AC=null,masterGain=null,muted=false,musicStarted=false;
 
 function initAudio(){
-  if(musicStarted) return;
+  if(musicStarted)return;
   musicStarted=true;
-  AC = new (window.AudioContext||window.webkitAudioContext)();
-  masterGain = AC.createGain();
-  masterGain.gain.value = 0.7;
-  // compressor para som mais quente
-  const comp = AC.createDynamicsCompressor();
-  comp.threshold.value=-18; comp.knee.value=12; comp.ratio.value=4;
-  comp.attack.value=0.003; comp.release.value=0.25;
-  masterGain.connect(comp); comp.connect(AC.destination);
+  AC=new(window.AudioContext||window.webkitAudioContext)();
+  masterGain=AC.createGain(); masterGain.gain.value=0.65;
+  const comp=AC.createDynamicsCompressor();
+  comp.threshold.value=-18;comp.knee.value=12;comp.ratio.value=4;
+  comp.attack.value=0.003;comp.release.value=0.25;
+  masterGain.connect(comp);comp.connect(AC.destination);
   scheduleMusic();
 }
 
 function toggleMute(){
   muted=!muted;
-  document.getElementById('muteBtn').textContent = muted?'🔇':'🔊';
-  if(masterGain) masterGain.gain.setTargetAtTime(muted?0:0.7, AC.currentTime, 0.1);
+  document.getElementById('muteBtn').textContent=muted?'🔇 MUDO':'🔊 SOM';
+  if(masterGain)masterGain.gain.setTargetAtTime(muted?0:0.65,AC.currentTime,0.1);
 }
 
-// Lo-fi: usa delay + reverb sintético + filtro LP para som "casette"
-function makeReverb(len=1.2, decay=2){
-  const sr=AC.sampleRate, frames=sr*len;
+let reverbNode=null;
+function getReverb(){
+  if(reverbNode)return reverbNode;
+  const sr=AC.sampleRate,frames=sr*0.9;
   const buf=AC.createBuffer(2,frames,sr);
-  for(let c=0;c<2;c++){
-    const d=buf.getChannelData(c);
-    for(let i=0;i<frames;i++) d[i]=(Math.random()*2-1)*Math.pow(1-i/frames,decay);
-  }
-  const conv=AC.createConvolver(); conv.buffer=buf; return conv;
+  for(let c=0;c<2;c++){const d=buf.getChannelData(c);for(let i=0;i<frames;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/frames,2);}
+  reverbNode=AC.createConvolver();reverbNode.buffer=buf;return reverbNode;
 }
 
-let reverb=null;
-function getReverb(){ if(!reverb) reverb=makeReverb(0.8,1.8); return reverb; }
-
-function note(freq,start,dur,vol,type='triangle',toMaster=false){
-  const osc=AC.createOscillator(), g=AC.createGain();
-  // filtro LP para som lo-fi warm
-  const flt=AC.createBiquadFilter(); flt.type='lowpass'; flt.frequency.value=2400; flt.Q.value=0.8;
-  osc.type=type; osc.frequency.value=freq;
-  // pequena detuning aleatória (cassete wow/flutter)
-  osc.detune.value=(Math.random()-0.5)*8;
+function note(freq,start,dur,vol,type='triangle'){
+  const osc=AC.createOscillator(),g=AC.createGain();
+  const flt=AC.createBiquadFilter();flt.type='lowpass';flt.frequency.value=2200;flt.Q.value=0.7;
+  osc.type=type;osc.frequency.value=freq;
+  osc.detune.value=(Math.random()-0.5)*10;
   g.gain.setValueAtTime(0,AC.currentTime+start);
-  g.gain.linearRampToValueAtTime(vol,AC.currentTime+start+0.012);
-  g.gain.setValueAtTime(vol,AC.currentTime+start+dur*0.7);
+  g.gain.linearRampToValueAtTime(vol,AC.currentTime+start+0.015);
+  g.gain.setValueAtTime(vol,AC.currentTime+start+dur*0.65);
   g.gain.exponentialRampToValueAtTime(0.0001,AC.currentTime+start+dur);
-  osc.connect(flt); flt.connect(g);
-  if(!toMaster){
-    const rv=getReverb(), rg=AC.createGain(); rg.gain.value=0.18;
-    g.connect(rv); rv.connect(rg); rg.connect(masterGain);
-  }
+  osc.connect(flt);flt.connect(g);
+  const rv=getReverb(),rg=AC.createGain();rg.gain.value=0.15;
+  g.connect(rv);rv.connect(rg);rg.connect(masterGain);
   g.connect(masterGain);
-  osc.start(AC.currentTime+start);
-  osc.stop(AC.currentTime+start+dur+0.05);
+  osc.start(AC.currentTime+start);osc.stop(AC.currentTime+start+dur+0.06);
 }
-
-function noiseHat(start,vol=0.015,dur=0.04){
+function kick(s,v=0.28){
+  const o=AC.createOscillator(),g=AC.createGain();o.type='sine';
+  o.frequency.setValueAtTime(170,AC.currentTime+s);o.frequency.exponentialRampToValueAtTime(38,AC.currentTime+s+0.18);
+  g.gain.setValueAtTime(v,AC.currentTime+s);g.gain.exponentialRampToValueAtTime(0.001,AC.currentTime+s+0.24);
+  o.connect(g);g.connect(masterGain);o.start(AC.currentTime+s);o.stop(AC.currentTime+s+0.26);
+}
+function snare(s,v=0.065){
+  const buf=AC.createBuffer(1,AC.sampleRate*0.14,AC.sampleRate);
+  const d=buf.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1;
+  const src=AC.createBufferSource(),bpf=AC.createBiquadFilter(),g=AC.createGain();
+  bpf.type='bandpass';bpf.frequency.value=1900;bpf.Q.value=0.5;
+  src.buffer=buf;
+  g.gain.setValueAtTime(v,AC.currentTime+s);g.gain.exponentialRampToValueAtTime(0.001,AC.currentTime+s+0.13);
+  src.connect(bpf);bpf.connect(g);g.connect(masterGain);
+  src.start(AC.currentTime+s);src.stop(AC.currentTime+s+0.15);
+  const o2=AC.createOscillator(),g2=AC.createGain();o2.type='triangle';o2.frequency.value=210;
+  g2.gain.setValueAtTime(v*0.35,AC.currentTime+s);g2.gain.exponentialRampToValueAtTime(0.001,AC.currentTime+s+0.06);
+  o2.connect(g2);g2.connect(masterGain);o2.start(AC.currentTime+s);o2.stop(AC.currentTime+s+0.07);
+}
+function hat(s,v=0.012,dur=0.04){
   const buf=AC.createBuffer(1,AC.sampleRate*dur,AC.sampleRate);
-  const d=buf.getChannelData(0);
-  for(let i=0;i<d.length;i++) d[i]=Math.random()*2-1;
-  const src=AC.createBufferSource(), g=AC.createGain();
-  const flt=AC.createBiquadFilter(); flt.type='highpass'; flt.frequency.value=7000;
-  src.buffer=buf; g.gain.value=vol;
-  src.connect(flt); flt.connect(g); g.connect(masterGain);
-  g.gain.setValueAtTime(vol,AC.currentTime+start);
-  g.gain.exponentialRampToValueAtTime(0.0001,AC.currentTime+start+dur);
-  src.start(AC.currentTime+start);
-  src.stop(AC.currentTime+start+dur+0.01);
+  const d=buf.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1;
+  const src=AC.createBufferSource(),flt=AC.createBiquadFilter(),g=AC.createGain();
+  flt.type='highpass';flt.frequency.value=7500;src.buffer=buf;
+  g.gain.setValueAtTime(v,AC.currentTime+s);g.gain.exponentialRampToValueAtTime(0.001,AC.currentTime+s+dur);
+  src.connect(flt);flt.connect(g);g.connect(masterGain);
+  src.start(AC.currentTime+s);src.stop(AC.currentTime+s+dur+0.01);
 }
 
-function kick(start,vol=0.3){
-  const osc=AC.createOscillator(), g=AC.createGain();
-  osc.type='sine';
-  osc.frequency.setValueAtTime(160,AC.currentTime+start);
-  osc.frequency.exponentialRampToValueAtTime(40,AC.currentTime+start+0.15);
-  g.gain.setValueAtTime(vol,AC.currentTime+start);
-  g.gain.exponentialRampToValueAtTime(0.001,AC.currentTime+start+0.22);
-  osc.connect(g); g.connect(masterGain);
-  osc.start(AC.currentTime+start); osc.stop(AC.currentTime+start+0.25);
-}
-
-function snare(start,vol=0.07){
-  // noise band + tone
-  const buf=AC.createBuffer(1,AC.sampleRate*0.15,AC.sampleRate);
-  const d=buf.getChannelData(0);
-  for(let i=0;i<d.length;i++) d[i]=Math.random()*2-1;
-  const src=AC.createBufferSource(), bpf=AC.createBiquadFilter(), g=AC.createGain();
-  bpf.type='bandpass'; bpf.frequency.value=1800; bpf.Q.value=0.5;
-  src.buffer=buf; g.gain.value=vol;
-  g.gain.setValueAtTime(vol,AC.currentTime+start);
-  g.gain.exponentialRampToValueAtTime(0.001,AC.currentTime+start+0.14);
-  src.connect(bpf); bpf.connect(g); g.connect(masterGain);
-  src.start(AC.currentTime+start); src.stop(AC.currentTime+start+0.16);
-  // body
-  const osc=AC.createOscillator(), og=AC.createGain();
-  osc.type='triangle'; osc.frequency.value=200;
-  og.gain.setValueAtTime(vol*0.4,AC.currentTime+start);
-  og.gain.exponentialRampToValueAtTime(0.001,AC.currentTime+start+0.06);
-  osc.connect(og); og.connect(masterGain);
-  osc.start(AC.currentTime+start); osc.stop(AC.currentTime+start+0.07);
-}
-
-// Escala pentatônica Dm lo-fi: D E F A C
-const SCALE = [146.83,164.81,174.61,220,261.63,293.66,329.63,349.23,440,523.25];
-// Acorde base Dm7 em oitavas baixas para pad
-const PAD_CHORDS = [
-  [73.4,87.3,110,130.8],  // Dm7
-  [65.4,82.4,110,130.8],  // Cm7
-  [73.4,92.5,110,138.6],  // Dm → Am
-  [65.4,77.8,98,130.8],   // Cm → Gm
-];
-
+const SC=[146.83,164.81,174.61,220,261.63,293.66,329.63,349.23,440,523.25];
+const PADS=[[73.4,87.3,110,130.8],[65.4,82.4,110,130.8],[73.4,92.5,110,138.6],[65.4,77.8,98,130.8]];
 let loopIdx=0;
 function scheduleMusic(){
-  if(!AC) return;
-  const BPM=82, beat=60/BPM, bar=beat*4, BARS=16;
-  const loopLen=bar*BARS;
-  const t0=loopIdx*loopLen;
-
-  // ── Pad de acordes ──
-  for(let bar4=0;bar4<BARS;bar4+=4){
-    const chord=PAD_CHORDS[Math.floor(bar4/4)%PAD_CHORDS.length];
-    chord.forEach(f=>{
-      note(f, t0+bar4*bar, bar*4*0.95, 0.06, 'sawtooth');
-    });
+  if(!AC)return;
+  const BPM=82,beat=60/BPM,bar=beat*4,BARS=16,loopLen=bar*BARS,t0=loopIdx*loopLen;
+  for(let b4=0;b4<BARS;b4+=4){
+    const ch=PADS[Math.floor(b4/4)%PADS.length];
+    ch.forEach(f=>note(f,t0+b4*bar,bar*4*0.93,0.055,'sawtooth'));
   }
-
-  // ── Linha de baixo ──
-  const bassNotes=[
-    [0,73.4,0.4],[1,73.4,0.2],[1.5,87.3,0.3],[2,65.4,0.4],
-    [3,65.4,0.2],[3.5,73.4,0.3],[4,73.4,0.4],[5,82.4,0.3],
-    [6,73.4,0.4],[7,65.4,0.3],[8,73.4,0.4],[9,73.4,0.2],
-    [9.5,82.4,0.2],[10,65.4,0.4],[11,77.8,0.3],[12,73.4,0.4],
-    [13,87.3,0.2],[14,65.4,0.4],[15,73.4,0.3]
-  ];
-  bassNotes.forEach(([b,f,d])=>{
-    note(f*2, t0+b*bar, d*bar, 0.11, 'triangle');
-  });
-
-  // ── Melodia ──
-  const mel=[
-    [0,4],[0.5,5],[1,6],[1.5,5],[2,4],[3,3],[3.5,2],[4,4],
-    [4.5,5],[5,7],[6,6],[7,5],[7.5,4],[8,6],[8.5,7],
-    [9,8],[10,7],[11,6],[12,5],[12.5,4],[13,3],[14,4],[14.5,5],[15,4]
-  ];
-  mel.forEach(([b,si])=>{
-    const f=SCALE[si%SCALE.length];
-    note(f, t0+b*bar, beat*0.55, 0.09, 'triangle');
-  });
-
-  // ── Contra-melodia (Rhodes-like) ──
-  const rhodes=[
-    [2,5],[3,7],[5,6],[6,8],[8,5],[9,4],[11,6],[13,7],[14,5],[15,6]
-  ];
-  rhodes.forEach(([b,si])=>{
-    note(SCALE[si%SCALE.length]*2, t0+b*bar, beat*0.38, 0.055, 'sine');
-  });
-
-  // ── Bateria ──
+  const bass=[[0,73.4,0.4],[1,73.4,0.2],[1.5,87.3,0.3],[2,65.4,0.4],[3,65.4,0.2],[3.5,73.4,0.3],
+              [4,73.4,0.4],[5,82.4,0.3],[6,73.4,0.4],[7,65.4,0.3],[8,73.4,0.4],[9,73.4,0.2],
+              [9.5,82.4,0.2],[10,65.4,0.4],[11,77.8,0.3],[12,73.4,0.4],[13,87.3,0.2],[14,65.4,0.4],[15,73.4,0.3]];
+  bass.forEach(([b,f,d])=>note(f*2,t0+b*bar,d*bar,0.11,'triangle'));
+  const mel=[[0,4],[0.5,5],[1,6],[1.5,5],[2,4],[3,3],[3.5,2],[4,4],[4.5,5],[5,7],
+             [6,6],[7,5],[7.5,4],[8,6],[8.5,7],[9,8],[10,7],[11,6],[12,5],[12.5,4],
+             [13,3],[14,4],[14.5,5],[15,4]];
+  mel.forEach(([b,si])=>note(SC[si%SC.length],t0+b*bar,beat*0.52,0.09,'triangle'));
+  const rh=[[2,5],[3,7],[5,6],[6,8],[8,5],[9,4],[11,6],[13,7],[14,5],[15,6]];
+  rh.forEach(([b,si])=>note(SC[si%SC.length]*2,t0+b*bar,beat*0.36,0.05,'sine'));
   for(let i=0;i<BARS;i++){
-    kick(t0+i*bar);
-    kick(t0+i*bar+beat*2);
-    snare(t0+i*bar+beat);
-    snare(t0+i*bar+beat*3);
-    // hihats em 8as (swing lo-fi)
-    for(let h=0;h<8;h++){
-      const swing = h%2===1 ? beat*0.055 : 0;
-      noiseHat(t0+i*bar+h*beat*0.5+swing, 0.012+(h%2)*0.006);
-    }
+    kick(t0+i*bar);kick(t0+i*bar+beat*2);
+    snare(t0+i*bar+beat);snare(t0+i*bar+beat*3);
+    for(let h=0;h<8;h++){const sw=h%2===1?beat*0.055:0;hat(t0+i*bar+h*beat*0.5+sw,0.011+(h%2)*0.005);}
   }
-
   loopIdx++;
-  setTimeout(scheduleMusic, (loopLen-0.3)*1000);
+  setTimeout(scheduleMusic,(loopLen-0.35)*1000);
 }
 
 function playSfx(freq,dur,vol=0.07,type='square'){
-  if(!AC||muted) return;
+  if(!AC||muted)return;
   const o=AC.createOscillator(),g=AC.createGain();
-  const flt=AC.createBiquadFilter(); flt.type='lowpass'; flt.frequency.value=3000;
-  o.type=type; o.frequency.value=freq;
-  g.gain.setValueAtTime(vol,AC.currentTime);
-  g.gain.exponentialRampToValueAtTime(0.001,AC.currentTime+dur);
-  o.connect(flt); flt.connect(g); g.connect(masterGain);
-  o.start(); o.stop(AC.currentTime+dur+0.01);
+  const flt=AC.createBiquadFilter();flt.type='lowpass';flt.frequency.value=3200;
+  o.type=type;o.frequency.value=freq;
+  g.gain.setValueAtTime(vol,AC.currentTime);g.gain.exponentialRampToValueAtTime(0.001,AC.currentTime+dur);
+  o.connect(flt);flt.connect(g);g.connect(masterGain);
+  o.start();o.stop(AC.currentTime+dur+0.01);
 }
 
-// ═══════════════════════════════════════════
-// CANVAS
-// ═══════════════════════════════════════════
+// ═══════════════════════════
+// CANVAS + BG
+// ═══════════════════════════
 const canvas=document.getElementById('gc');
 const ctx=canvas.getContext('2d');
 let W,H;
 function resize(){W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight;}
-resize(); window.addEventListener('resize',resize);
+resize();window.addEventListener('resize',resize);
 
-// bg offscreen para fundo de célula
-let bgCanvas=null, bgCtx=null;
+let bgCanvas=null;
 function buildBg(){
-  bgCanvas=document.createElement('canvas');
-  bgCanvas.width=W; bgCanvas.height=H;
-  bgCtx=bgCanvas.getContext('2d');
-  drawBg(bgCtx,W,H);
-}
-function drawBg(c,w,h){
-  // gradiente radial — interior celular
-  const g=c.createRadialGradient(w*0.5,h*0.5,0,w*0.5,h*0.5,w*0.7);
-  g.addColorStop(0,'#0d0830'); g.addColorStop(0.5,'#07062a'); g.addColorStop(1,'#030310');
-  c.fillStyle=g; c.fillRect(0,0,w,h);
-  // rede de microtúbulos (linhas finas)
-  c.strokeStyle='rgba(109,40,217,0.07)'; c.lineWidth=1;
-  for(let i=0;i<18;i++){
-    const x1=Math.random()*w,y1=Math.random()*h,x2=Math.random()*w,y2=Math.random()*h;
-    c.beginPath(); c.moveTo(x1,y1); c.lineTo(x2,y2); c.stroke();
+  bgCanvas=document.createElement('canvas');bgCanvas.width=W;bgCanvas.height=H;
+  const bc=bgCanvas.getContext('2d');
+  const g=bc.createRadialGradient(W*.5,H*.5,0,W*.5,H*.5,W*.72);
+  g.addColorStop(0,'#0e0830');g.addColorStop(0.5,'#08062c');g.addColorStop(1,'#030310');
+  bc.fillStyle=g;bc.fillRect(0,0,W,H);
+  bc.strokeStyle='rgba(109,40,217,0.065)';bc.lineWidth=1;
+  for(let i=0;i<20;i++){bc.beginPath();bc.moveTo(Math.random()*W,Math.random()*H);bc.lineTo(Math.random()*W,Math.random()*H);bc.stroke();}
+  for(let i=0;i<14;i++){
+    const x=Math.random()*W,y=Math.random()*H,r=25+Math.random()*65;
+    const og=bc.createRadialGradient(x,y,0,x,y,r);
+    og.addColorStop(0,`hsla(${200+Math.random()*120|0},60%,28%,0.07)`);og.addColorStop(1,'transparent');
+    bc.fillStyle=og;bc.beginPath();bc.arc(x,y,r,0,Math.PI*2);bc.fill();
   }
-  // organelas de fundo (círculos suaves)
-  for(let i=0;i<12;i++){
-    const x=Math.random()*w,y=Math.random()*h,r=20+Math.random()*60;
-    const og=c.createRadialGradient(x,y,0,x,y,r);
-    const hue=200+Math.floor(Math.random()*120);
-    og.addColorStop(0,`hsla(${hue},60%,30%,0.06)`);
-    og.addColorStop(1,'transparent');
-    c.fillStyle=og; c.beginPath(); c.arc(x,y,r,0,Math.PI*2); c.fill();
-  }
-  // pontos brilhantes (ribossomos / vesículas)
-  for(let i=0;i<60;i++){
-    c.fillStyle=`rgba(167,139,250,${0.02+Math.random()*0.05})`;
-    c.beginPath(); c.arc(Math.random()*w,Math.random()*h,1+Math.random()*2,0,Math.PI*2); c.fill();
+  for(let i=0;i<70;i++){
+    bc.fillStyle=`rgba(167,139,250,${0.02+Math.random()*0.05})`;
+    bc.beginPath();bc.arc(Math.random()*W,Math.random()*H,1+Math.random()*2,0,Math.PI*2);bc.fill();
   }
 }
 
-// ═══════════════════════════════════════════
+// ═══════════════════════════
 // DADOS
-// ═══════════════════════════════════════════
-const CURIOSIDADES=[
-  'Lisossomos têm pH ~4,5 — mais ácido que o suco de laranja! Essa acidez é essencial para ativar suas ~50 enzimas hidrolíticas.',
-  'Christian de Duve descobriu o lisossomo em 1955 estudando enzimas do fígado de rato. Ele ganhou o Nobel de Medicina em 1974!',
-  'LAMP-1 e LAMP-2 cobrem 50% da membrana lisossomal e protegem-na das suas próprias enzimas digestivas.',
-  'A autofagia (descoberta valeu Nobel 2016 a Ohsumi) usa lisossomos para reciclar organelas danificadas em nutrientes.',
-  'Sem lisossomos funcionais, ocorrem doenças de depósito: Gaucher, Tay-Sachs, Pompe — substratos acumulam até matar a célula.',
-  'A V-ATPase é a bomba de prótons que acidifica o lisossomo, bombeando H⁺ do citosol para dentro continuamente.',
-  'Lisossomos não existem em células vegetais! Nestas, os vacúolos têm papel equivalente de digestão intracelular.',
+// ═══════════════════════════
+const CURIOS=[
+  'Lisossomos têm pH ~4,5 — mais ácido que o suco de laranja! Essa acidez ativa suas ~50 enzimas hidrolíticas.',
+  'Christian de Duve descobriu o lisossomo em 1955 estudando enzimas do fígado de rato e ganhou o Nobel de Medicina em 1974!',
+  'LAMP-1 e LAMP-2 cobrem 50% da membrana lisossomal — protegendo-a das suas próprias enzimas digestivas.',
+  'A autofagia (Nobel 2016 a Yoshinori Ohsumi) usa lisossomos para reciclar organelas danificadas em nutrientes reaproveitáveis.',
+  'Sem lisossomos funcionais ocorrem doenças de depósito: Gaucher, Tay-Sachs, Pompe — substratos acumulam até matar a célula.',
+  'A V-ATPase é a bomba de prótons que mantém o pH 4,5 no lisossomo, bombeando H⁺ continuamente do citosol para dentro.',
+  'Lisossomos não existem em células vegetais! Vacúolos centrais cumprem papel equivalente de digestão intracelular.',
   'Na apoptose (morte celular programada), lisossomos liberam catepsinas no citosol para ativar a destruição ordenada da célula.',
-  'mTORC1 fosforila e inativa TFEB em condições ricas em nutrientes — em jejum, TFEB migra ao núcleo e ativa >400 genes lisossomais!',
+  'mTORC1 inibe o fator TFEB em condições ricas em nutrientes. Em jejum, TFEB vai ao núcleo e ativa mais de 400 genes lisossomais!',
   'Vírus como Ebola e SARS-CoV-2 "sequestram" o lisossomo: usam catepsinas B/L para ativar suas próprias proteínas de fusão!',
 ];
 
 const UPGRADES=[
   {title:'Hidrolases Extras',icon:'⚗',color:'#a855f7',
-   desc:'Enzimas hidrolíticas +25% de dano.',
+   desc:'+25% de dano em todas as enzimas.',
    bio:'Lisossomos têm ~50 hidrolases ácidas: proteases, lipases, nucleases e glicosilases.',
    apply:g=>{g.pl.baseDmg*=1.25;}},
   {title:'pH Ótimo 4.5',icon:'🔬',color:'#38bdf8',
-   desc:'V-ATPase turbinada: velocidade de ataque +35%.',
-   bio:'A bomba V-ATPase mantém pH 4.5–5.0, ativando todas as enzimas hidrolíticas.',
+   desc:'V-ATPase turbo: velocidade de ataque +35%.',
+   bio:'A bomba V-ATPase mantém pH 4.5–5.0, ativando todas as enzimas hidrolíticas do lisossomo.',
    apply:g=>{g.pl.atkSpd*=0.65;}},
   {title:'Catepsinas B/L',icon:'🧫',color:'#f0abfc',
    desc:'Projéteis perfuram +2 inimigos extras.',
-   bio:'Catepsinas são proteases que clivam proteínas estruturais de patógenos — usadas até por vírus como SARS-CoV-2.',
+   bio:'Catepsinas são proteases que clivam proteínas estruturais dos patógenos — vitais na defesa celular.',
    apply:g=>{g.pl.pierce+=2;}},
   {title:'Membrana LAMP',icon:'🛡',color:'#22c55e',
    desc:'HP máximo +60. Regenera 25 HP agora.',
-   bio:'LAMP-1 e LAMP-2 são glicoproteínas que blindam a membrana lisossomal das próprias enzimas internas.',
+   bio:'LAMP-1 e LAMP-2 são glicoproteínas que blindam a membrana lisossomal das próprias enzimas.',
    apply:g=>{g.pl.maxHp+=60;g.pl.hp=Math.min(g.pl.hp+25,g.pl.maxHp);}},
   {title:'Exocitose Lisossomal',icon:'💥',color:'#fb923c',
-   desc:'Aura de enzimas ativas ao redor do lisossomo (+60 raio, brilho laranja visível).',
-   bio:'Exocitose lisossomal libera enzimas no espaço extracelular — remodelamento de matriz e defesa imune.',
+   desc:'Aura laranja de enzimas ao redor (+60 raio).',
+   bio:'Exocitose lisossomal libera enzimas no espaço extracelular — essencial no remodelamento de tecidos.',
    apply:g=>{g.pl.aura+=60;}},
   {title:'TFEB Ativado',icon:'🚀',color:'#facc15',
    desc:'Velocidade de movimento +30%.',
-   bio:'TFEB é o "master regulator" dos genes lisossomais. Inibição de mTORC1 o libera para ativar biogênese lisossomal.',
+   bio:'TFEB é o regulador mestre dos genes lisossomais. Ativado em jejum, promove biogênese de lisossomos.',
    apply:g=>{g.pl.speed*=1.30;}},
   {title:'Fusão Endossomal',icon:'🔄',color:'#c084fc',
-   desc:'+2 projéteis saem juntos na mesma direção.',
-   bio:'Fusão endossomo tardio → lisossomo cria endolisossomos com altíssima concentração enzimática.',
+   desc:'+2 projéteis na mesma direção.',
+   bio:'Fusão endossomo tardio → lisossomo cria endolisossomos com concentração muito alta de enzimas.',
    apply:g=>{g.pl.multiShot+=2;}},
   {title:'Autofagia Basal',icon:'♻',color:'#4ade80',
-   desc:'Regenera 1.5 HP/segundo continuamente.',
+   desc:'Regenera 1,5 HP/segundo continuamente.',
    bio:'Autofagia basal (Nobel 2016) remove organelas danificadas 24h/dia — homeostase celular contínua.',
    apply:g=>{g.pl.regen+=1.5;}},
   {title:'Nucleases Ativas',icon:'🧬',color:'#67e8f9',
-   desc:'Alcance dos projéteis +50%.',
+   desc:'Alcance dos projéteis +65%.',
    bio:'DNases e RNases lisossomais destroem o material genético de vírus e bactérias após fagocitose.',
-   apply:g=>{g.pl.bulletRange*=1.5;}},
+   apply:g=>{g.pl.bulletRange*=1.65;}},
   {title:'Proteostase',icon:'⚡',color:'#fbbf24',
-   desc:'Dano +15% e velocidade de ataque +15%.',
-   bio:'Proteostase = homeostase proteica. Lisossomos degradam proteínas mal dobradas (como na doença de Gaucher).',
+   desc:'+15% dano e +15% velocidade de ataque.',
+   bio:'Proteostase é a homeostase proteica. Lisossomos degradam proteínas mal dobradas evitando doenças.',
    apply:g=>{g.pl.baseDmg*=1.15;g.pl.atkSpd*=0.85;}},
 ];
 
@@ -480,203 +456,189 @@ const BOSS_LESSONS=[
 <em>Como funciona:</em><br>
 1. Membrana (fago) envolve a organela danificada<br>
 2. Forma o <em>autofagossomo</em><br>
-3. Funde com o lisossomo → <em>autolisossomo</em><br>
+3. Funde-se com o lisossomo → <em>autolisossomo</em><br>
 4. Enzimas degradam o conteúdo em aminoácidos reutilizáveis<br><br>
 <strong>Nobel 2016:</strong> Yoshinori Ohsumi ganhou o Nobel descobrindo os genes da autofagia em levedura.<br><br>
-<strong>Importância médica:</strong> Defeitos na autofagia estão associados ao Parkinson, Alzheimer, Huntington e câncer.`},
+<strong>Importância médica:</strong> Defeitos na autofagia causam Parkinson, Alzheimer, Huntington e câncer.`},
   {title:'Lisossomos & Vírus — Batalha Molecular',
-   text:`<strong>DEFESA ANTIVIRAL:</strong> Partículas virais chegam ao endossomo tardio → funde com lisossomo.<br><br>
-<em>Mecanismo de defesa:</em><br>
+   text:`<strong>DEFESA ANTIVIRAL:</strong> Partículas virais chegam ao endossomo tardio e fundem com lisossomos.<br><br>
+<em>Mecanismo:</em><br>
 • Enzimas clivam proteínas do capsídeo viral<br>
-• Catepsinas ativam receptores TLR7/TLR9 que detectam RNA/DNA viral<br>
+• Catepsinas ativam TLR7/TLR9 que detectam RNA/DNA viral<br>
 • Ativam produção de interferon tipo I (resposta imune)<br><br>
-<strong>⚠ Contraataque viral:</strong> Coronavírus e Ebola <em>usam</em> o lisossomo! Catepsinas B/L clivam a espícula viral — ativando a fusão com a membrana. Por isso inibidores de catepsinas são estudados como antivirais.`},
+<strong>⚠ Contraataque viral:</strong> Coronavírus e Ebola <em>usam</em> o lisossomo! Catepsinas B/L clivam a espícula viral ativando a fusão com a membrana. Por isso inibidores de catepsinas são estudados como antivirais.`},
   {title:'Fagocitose — Engolindo o Inimigo',
-   text:`<strong>FAGOCITOSE</strong> é a ingestão de partículas grandes (bactérias) por células especializadas.<br><br>
+   text:`<strong>FAGOCITOSE</strong> é a ingestão de bactérias por células especializadas do sistema imune.<br><br>
 <em>Etapas:</em><br>
-1. Anticorpos opsonizam a bactéria (marcam para destruição)<br>
+1. Anticorpos marcam a bactéria (opsonização)<br>
 2. Receptores Fc do macrófago reconhecem os anticorpos<br>
-3. Membrana envolve a bactéria → <em>fagossomo</em><br>
-4. Fagossomo funde com lisossomo → <em>fagolisossomo</em><br>
-5. pH cai a 4.5 → enzimas destroem completamente a bactéria<br><br>
-<strong>Células que fazem isso:</strong> Macrófagos, neutrófilos, células dendríticas — os soldados da imunidade inata!`},
+3. Membrana envolve → <em>fagossomo</em><br>
+4. Fagossomo + lisossomo → <em>fagolisossomo</em><br>
+5. pH cai a 4,5 → enzimas destroem a bactéria completamente<br><br>
+<strong>Quem faz isso?</strong> Macrófagos, neutrófilos e células dendríticas!`},
   {title:'Doenças de Depósito Lisossomal',
-   text:`Quando uma <strong>enzima lisossomal está ausente ou defeituosa</strong>, o substrato acumula — causando doenças progressivas graves.<br><br>
+   text:`Quando uma <strong>enzima lisossomal está ausente</strong>, o substrato acumula causando doenças graves.<br><br>
 <em>Exemplos:</em><br>
 • <strong>Gaucher</strong>: ↓glicocerebrosidase → acúmulo de glicocerebrosídeo (mais comum, 1:40.000)<br>
 • <strong>Tay-Sachs</strong>: ↓hexosaminidase A → acúmulo de GM2 em neurônios (fatal antes dos 5 anos)<br>
-• <strong>Pompe</strong>: ↓alfa-glicosidase ácida → acúmulo de glicogênio no coração<br>
-• <strong>Niemann-Pick C</strong>: proteína NPC1 defeituosa → acúmulo de colesterol<br><br>
-<strong>Tratamento:</strong> Terapia de Reposição Enzimática (TRE) — aprovada para Gaucher, Pompe, Fabry e outras.`},
+• <strong>Pompe</strong>: ↓alfa-glicosidase → acúmulo de glicogênio cardíaco<br>
+• <strong>Niemann-Pick C</strong>: NPC1 defeituosa → acúmulo de colesterol<br><br>
+<strong>Tratamento:</strong> Terapia de Reposição Enzimática (TRE) — aprovada para Gaucher, Pompe e Fabry.`},
 ];
 
 const ENEMY_TYPES=[
-  {name:'Coco',hp:22,speed:1.0,dmg:0.28,size:11,exp:5,shape:'coco',color:'#16a34a'},
-  {name:'Bacilo',hp:30,speed:0.8,dmg:0.32,size:14,exp:7,shape:'bacilo',color:'#15803d'},
-  {name:'Espiral',hp:26,speed:1.2,dmg:0.24,size:12,exp:6,shape:'espiral',color:'#166534'},
-  {name:'VírusHex',hp:24,speed:1.3,dmg:0.22,size:11,exp:6,shape:'hex',color:'#6d28d9'},
-  {name:'VírusSpike',hp:32,speed:1.05,dmg:0.28,size:13,exp:8,shape:'spike',color:'#7c3aed'},
-  {name:'Capsídeo',hp:42,speed:0.8,dmg:0.36,size:15,exp:11,shape:'capsid',color:'#4c1d95'},
-  {name:'Fungo',hp:48,speed:0.6,dmg:0.4,size:16,exp:12,shape:'fungo',color:'#b45309'},
-  {name:'Prion',hp:20,speed:1.55,dmg:0.24,size:9,exp:5,shape:'prion',color:'#9f1239'},
+  {name:'Coco',hp:20,speed:1.1,dmg:0.3,size:11,exp:5,shape:'coco',color:'#16a34a'},
+  {name:'Bacilo',hp:28,speed:0.85,dmg:0.34,size:14,exp:7,shape:'bacilo',color:'#15803d'},
+  {name:'Espiral',hp:24,speed:1.3,dmg:0.26,size:12,exp:6,shape:'espiral',color:'#166534'},
+  {name:'VírusHex',hp:22,speed:1.4,dmg:0.24,size:11,exp:6,shape:'hex',color:'#6d28d9'},
+  {name:'VírusSpike',hp:30,speed:1.1,dmg:0.3,size:13,exp:8,shape:'spike',color:'#7c3aed'},
+  {name:'Capsídeo',hp:40,speed:0.82,dmg:0.38,size:15,exp:11,shape:'capsid',color:'#4c1d95'},
+  {name:'Fungo',hp:46,speed:0.62,dmg:0.42,size:16,exp:12,shape:'fungo',color:'#b45309'},
+  {name:'Prion',hp:19,speed:1.65,dmg:0.25,size:9,exp:5,shape:'prion',color:'#9f1239'},
 ];
 
 const BOSSES=[
-  {name:'Proteína Mal-Dobrada',hp:420,speed:0.75,dmg:0.55,size:40,color:'#dc2626',exp:90,
-   shootCd:2.2,bulletSpd:2.8,bulletDmg:9,lesson:BOSS_LESSONS[0]},
-  {name:'Vírus Lisossomotrófico',hp:650,speed:0.65,dmg:0.6,size:46,color:'#ea580c',exp:130,
-   shootCd:1.8,bulletSpd:3.2,bulletDmg:11,lesson:BOSS_LESSONS[1]},
-  {name:'Bactéria Fagocitada',hp:880,speed:0.6,dmg:0.65,size:50,color:'#15803d',exp:170,
-   shootCd:1.5,bulletSpd:3.5,bulletDmg:13,lesson:BOSS_LESSONS[2]},
-  {name:'Colesterol NPC1',hp:1100,speed:0.55,dmg:0.7,size:54,color:'#d97706',exp:220,
-   shootCd:1.2,bulletSpd:3.8,bulletDmg:15,lesson:BOSS_LESSONS[3]},
+  {name:'Proteína Mal-Dobrada',hp:380,speed:0.8,dmg:0.55,size:40,color:'#dc2626',exp:85,
+   shootCd:2.0,bulletSpd:3.0,bulletDmg:9,lesson:BOSS_LESSONS[0]},
+  {name:'Vírus Lisossomotrófico',hp:580,speed:0.68,dmg:0.6,size:46,color:'#ea580c',exp:125,
+   shootCd:1.7,bulletSpd:3.4,bulletDmg:11,lesson:BOSS_LESSONS[1]},
+  {name:'Bactéria Fagocitada',hp:800,speed:0.62,dmg:0.65,size:50,color:'#15803d',exp:165,
+   shootCd:1.4,bulletSpd:3.6,bulletDmg:13,lesson:BOSS_LESSONS[2]},
+  {name:'Colesterol NPC1',hp:1050,speed:0.56,dmg:0.7,size:54,color:'#d97706',exp:210,
+   shootCd:1.15,bulletSpd:4.0,bulletDmg:15,lesson:BOSS_LESSONS[3]},
 ];
 
-// ═══════════════════════════════════════════
+// ═══════════════════════════
 // ESTADO
-// ═══════════════════════════════════════════
+// ═══════════════════════════
 let G=null,animId=null,lastT=0,joyActive=false;
 
 function mkGame(){
   return {
     pl:{x:W/2,y:H/2,hp:120,maxHp:120,speed:2.6,
-        xp:0,xpNext:28,level:1,
-        baseDmg:25,atkSpd:1,atkCd:0,
-        bulletRange:150,multiShot:1,pierce:1,
+        xp:0,xpNext:80,level:1,
+        baseDmg:22,atkSpd:1,atkCd:0,
+        bulletRange:18,multiShot:1,pierce:1,
         aura:0,regen:0,invincible:0},
     enemies:[],bullets:[],enemyBullets:[],particles:[],xpOrbs:[],
     kills:0,
-    timeLeft:240,elapsed:0,  // 4 min
+    timeLeft:150,elapsed:0,  // 2:30
     paused:false,dead:false,
-    bossSpawned:[false,false,false,false],
     curBoss:null,
-    spawnT:0,spawnI:1.5,
+    spawnT:3.2,spawnI:3.2,
     joyDir:{x:0,y:0},
     frame:0,
-    // boss triggers: a cada minuto no segundo 30
-    // min3:30 = 210s, min2:30=150s, min1:30=90s, min0:30=30s restantes
-    bossTimes:[210,150,90,30],
+    // 4 bosses em 2:30 → tempos restantes: 120s, 85s, 50s, 18s
+    bossTimes:[120,90,60,20],
     bossTriggered:[false,false,false,false],
   };
 }
 
-// ═══════════════════════════════════════════
-// INÍCIO
-// ═══════════════════════════════════════════
 document.getElementById('startBtn').addEventListener('click',()=>{
   initAudio();
   document.getElementById('startScreen').style.display='none';
   buildBg();
   G=mkGame();
   lastT=performance.now();
-  if(animId) cancelAnimationFrame(animId);
+  if(animId)cancelAnimationFrame(animId);
   loop(lastT);
 });
 
-// ═══════════════════════════════════════════
+// ═══════════════════════════
 // LOOP
-// ═══════════════════════════════════════════
+// ═══════════════════════════
 function loop(ts){
   animId=requestAnimationFrame(loop);
   const dt=Math.min((ts-lastT)/1000,0.05);
   lastT=ts;
   if(!G||G.paused||G.dead){render();return;}
-  update(dt);
-  render();
+  update(dt);render();
 }
 
 function update(dt){
   const g=G,p=g.pl;
-  g.frame++;
-  g.timeLeft-=dt; g.elapsed+=dt;
+  g.frame++;g.timeLeft-=dt;g.elapsed+=dt;
 
-  // boss triggers no 0:30 de cada minuto (tempos com timeLeft restante)
   for(let i=0;i<4;i++){
-    if(!g.bossTriggered[i] && g.timeLeft<=g.bossTimes[i]){
-      g.bossTriggered[i]=true;
-      triggerBoss(i);
+    if(!g.bossTriggered[i]&&g.timeLeft<=g.bossTimes[i]){
+      g.bossTriggered[i]=true;triggerBoss(i);
     }
   }
-
   if(g.timeLeft<=0){endGame(true);return;}
   if(p.hp<=0){endGame(false);return;}
 
-  if(p.regen>0) p.hp=Math.min(p.maxHp,p.hp+p.regen*dt);
-  if(p.invincible>0) p.invincible-=dt;
+  if(p.regen>0)p.hp=Math.min(p.maxHp,p.hp+p.regen*dt);
+  if(p.invincible>0)p.invincible-=dt;
 
-  // mover player
-  p.x+=g.joyDir.x*p.speed; p.y+=g.joyDir.y*p.speed;
-  p.x=Math.max(20,Math.min(W-20,p.x)); p.y=Math.max(20,Math.min(H-20,p.y));
+  p.x+=g.joyDir.x*p.speed;p.y+=g.joyDir.y*p.speed;
+  p.x=Math.max(20,Math.min(W-20,p.x));p.y=Math.max(20,Math.min(H-20,p.y));
 
-  // ataque
   p.atkCd-=dt;
-  if(p.atkCd<=0){p.atkCd=0.6*p.atkSpd; autoShoot();}
+  if(p.atkCd<=0){p.atkCd=0.58*p.atkSpd;autoShoot();}
 
-  // aura
+  // aura — dano contínuo em inimigos dentro do raio
   if(p.aura>0){
-    g.enemies.forEach(e=>{
+    for(let i=g.enemies.length-1;i>=0;i--){
+      const e=g.enemies[i];
       if(dist2(p,e)<p.aura+e.size){
-        e.hp-=p.baseDmg*0.7*dt;
-        e.flash=3;
-        if(Math.random()<0.2) addParticle(e.x,e.y,'#fb923c',4);
+        e.hp-=p.baseDmg*1.2*dt;e.flash=3;
+        if(Math.random()<0.3)addParticle(e.x,e.y,'#fb923c',4);
+        if(e.hp<=0){
+          spawnXpOrbs(e.x,e.y,e.exp);addParticle(e.x,e.y,e.color,12);
+          playSfx(440+Math.random()*200,0.1,0.06,'square');
+          if(e.isBoss){g.curBoss=null;document.getElementById('bossBar').style.display='none';spawnXpOrbs(e.x,e.y,e.exp*3);showBossKill(e.bossRef);}
+          g.enemies.splice(i,1);g.kills++;
+        }
       }
-    });
+    }
   }
 
-  // spawn inimigos — mais difícil desde o início
+  // spawn gradual — começa devagar, aumenta com o tempo
   g.spawnT-=dt;
   if(g.spawnT<=0){
-    const rate=Math.max(0.28,g.spawnI*(1-g.elapsed/280));
+    // intervalo decresce de 3.2s até 0.55s ao longo dos 150s
+    // começa com 2, vai subindo mas nunca passa de 3 por onda
+    const rate=Math.max(0.85,2.6-g.elapsed*0.011);
     g.spawnT=rate;
     spawnEnemy();
-    if(g.elapsed>30) spawnEnemy();
-    if(g.elapsed>90) spawnEnemy();
-    if(g.elapsed>150) spawnEnemy();
+    if(g.elapsed>15)spawnEnemy();
+    if(g.elapsed>100)spawnEnemy();
   }
 
-  // boss atira
+  // só bosses atiram
   g.enemies.forEach(e=>{
-    if(!e.isBoss) return;
+    if(!e.isBoss)return;
     e.shootT=(e.shootT||0)-dt;
     if(e.shootT<=0){
       const bd=BOSSES.find(b=>b.name===e.name)||BOSSES[0];
       e.shootT=bd.shootCd;
       const angle=Math.atan2(p.y-e.y,p.x-e.x);
-      [-0.28,0,0.28].forEach(off=>{
-        g.enemyBullets.push({
-          x:e.x,y:e.y,
-          vx:Math.cos(angle+off)*bd.bulletSpd,
-          vy:Math.sin(angle+off)*bd.bulletSpd,
-          dmg:bd.bulletDmg,life:2.8,size:8,
-        });
+      [-0.3,0,0.3].forEach(off=>{
+        g.enemyBullets.push({x:e.x,y:e.y,
+          vx:Math.cos(angle+off)*bd.bulletSpd,vy:Math.sin(angle+off)*bd.bulletSpd,
+          dmg:bd.bulletDmg,life:2.6,size:9,isBoss:true});
       });
-      playSfx(160,0.18,0.06,'sawtooth');
+      playSfx(155,0.2,0.06,'sawtooth');
     }
   });
 
-  // balas do player
+  // balas player
   g.bullets=g.bullets.filter(b=>{
-    b.x+=b.vx; b.y+=b.vy;
+    b.x+=b.vx;b.y+=b.vy;
     b.traveled=(b.traveled||0)+Math.hypot(b.vx,b.vy);
-    if(b.traveled>b.range*22) return false;
-    if(b.x<-300||b.x>W+300||b.y<-300||b.y>H+300) return false;
+    if(b.traveled>b.range*20)return false;
+    if(b.x<-200||b.x>W+200||b.y<-200||b.y>H+200)return false;
     let hit=false;
     for(let i=g.enemies.length-1;i>=0;i--){
       const e=g.enemies[i];
       if(dist2(b,e)<e.size+b.size){
-        e.hp-=b.dmg; e.flash=8;
-        addParticle(b.x,b.y,'#d946ef',4);
+        e.hp-=b.dmg;e.flash=8;addParticle(b.x,b.y,'#d946ef',4);
         b.pierce--;
         if(e.hp<=0){
-          spawnXpOrbs(e.x,e.y,e.exp);
-          addParticle(e.x,e.y,e.color,12);
+          spawnXpOrbs(e.x,e.y,e.exp);addParticle(e.x,e.y,e.color,12);
           playSfx(440+Math.random()*200,0.1,0.06,'square');
-          if(e.isBoss){
-            g.curBoss=null;
-            document.getElementById('bossBar').style.display='none';
-            showBossKill(e.bossRef);
-          }
-          g.enemies.splice(i,1); g.kills++;
+          if(e.isBoss){g.curBoss=null;document.getElementById('bossBar').style.display='none';spawnXpOrbs(e.x,e.y,e.exp*3);showBossKill(e.bossRef);}
+          g.enemies.splice(i,1);g.kills++;
         }
         if(b.pierce<=0){hit=true;break;}
       }
@@ -686,13 +648,11 @@ function update(dt){
 
   // balas inimigas
   g.enemyBullets=g.enemyBullets.filter(b=>{
-    b.x+=b.vx; b.y+=b.vy; b.life-=dt;
-    if(b.life<=0) return false;
+    b.x+=b.vx;b.y+=b.vy;b.life-=dt;
+    if(b.life<=0)return false;
     if(dist2(b,p)<20+b.size&&p.invincible<=0){
-      p.hp=Math.max(0,p.hp-b.dmg); p.invincible=0.55;
-      addParticle(p.x,p.y,'#ef4444',5);
-      playSfx(110,0.22,0.09,'sawtooth');
-      return false;
+      p.hp=Math.max(0,p.hp-b.dmg);p.invincible=0.55;
+      addParticle(p.x,p.y,'#ef4444',5);playSfx(110,0.22,0.09,'sawtooth');return false;
     }
     return true;
   });
@@ -700,148 +660,125 @@ function update(dt){
   // mover inimigos
   g.enemies.forEach(e=>{
     const dx=p.x-e.x,dy=p.y-e.y,d=Math.sqrt(dx*dx+dy*dy)||1;
-    e.x+=dx/d*e.speed; e.y+=dy/d*e.speed;
-    e.angle=(e.angle||0)+0.03;
-    if(e.flash>0) e.flash--;
-    if(d<e.size+18&&p.invincible<=0){p.hp=Math.max(0,p.hp-e.dmg);p.invincible=0.38;}
+    e.x+=dx/d*e.speed;e.y+=dy/d*e.speed;
+    e.angle=(e.angle||0)+0.03;if(e.flash>0)e.flash--;
+    if(d<e.size+20){if(p.invincible<=0){p.hp=Math.max(0,p.hp-e.dmg*2.5);p.invincible=0.28;addParticle(p.x,p.y,'#ef4444',4);}}
     if(e.isBoss&&g.curBoss===e){
       const bd=BOSSES.find(b=>b.name===e.name)||BOSSES[0];
       document.getElementById('bossBarFill').style.width=Math.max(0,e.hp/bd.hp*100)+'%';
     }
   });
 
-  // orbs XP → sempre vão ao player
+  // orbs XP sempre indo pro player
   g.xpOrbs=g.xpOrbs.filter(o=>{
     const dx=p.x-o.x,dy=p.y-o.y,d=Math.sqrt(dx*dx+dy*dy)||1;
-    const spd=Math.max(4,10-d*0.03);
-    o.x+=dx/d*spd; o.y+=dy/d*spd; o.life-=dt;
+    const spd=Math.max(5,11-d*0.025);
+    o.x+=dx/d*spd;o.y+=dy/d*spd;o.life-=dt;
     if(d<22||o.life<=0){
       if(d<22){
-        p.xp+=o.val; playSfx(700,0.07,0.04,'sine');
-        while(p.xp>=p.xpNext){
-          p.xp-=p.xpNext; p.level++;
-          p.xpNext=Math.round(p.xpNext*1.3);
-          setTimeout(()=>showUpgrades(),50);
-        }
+        p.xp+=o.val;playSfx(720,0.07,0.04,'sine');
+        while(p.xp>=p.xpNext){p.xp-=p.xpNext;p.level++;p.xpNext=Math.round(p.xpNext*1.35);setTimeout(()=>showUpgrades(),50);}
       }
       return false;
     }
     return true;
   });
 
-  // partículas
   g.particles.forEach(pt=>{pt.x+=pt.vx;pt.y+=pt.vy;pt.vx*=0.88;pt.vy*=0.88;pt.life-=dt;pt.r*=0.92;});
   g.particles=g.particles.filter(pt=>pt.life>0);
-
   updateHUD();
 }
 
-// ═══════════════════════════════════════════
-// SPAWN
-// ═══════════════════════════════════════════
+// ═══════════════════════════
+// SPAWN / BOSSES
+// ═══════════════════════════
 function spawnEnemy(){
   const g=G,angle=Math.random()*Math.PI*2,r=Math.max(W,H)*0.62;
-  const lvl=Math.min(Math.floor(g.elapsed/45)+1,6);
-  const pool=ENEMY_TYPES.slice(0,Math.min(2+lvl,ENEMY_TYPES.length));
+  const timeLvl=Math.min(Math.floor(g.elapsed/30)+1,6);
+  const plLvl=g.pl.level;
+  const pool=ENEMY_TYPES.slice(0,Math.min(2+timeLvl,ENEMY_TYPES.length));
   const t=pool[Math.floor(Math.random()*pool.length)];
-  const sc=1+lvl*0.14;
-  g.enemies.push({
-    x:g.pl.x+Math.cos(angle)*r,y:g.pl.y+Math.sin(angle)*r,
-    hp:t.hp*sc,maxHp:t.hp*sc,speed:t.speed,dmg:t.dmg,size:t.size,
-    color:t.color,exp:t.exp,shape:t.shape,
-    isBoss:false,flash:0,angle:Math.random()*Math.PI*2,
-  });
+  // HP escala pelo tempo E pelo nível do jogador para manter desafio
+  const sc=(1+timeLvl*0.14)*(1+plLvl*0.12);
+  // Chance de inimigo atirar: 0% no inicio, sobe até ~45% após 60s
+  const shootChance=Math.min(0.15,Math.max(0,(g.elapsed-40)/150));
+  const canShoot=Math.random()<shootChance;
+  g.enemies.push({x:g.pl.x+Math.cos(angle)*r,y:g.pl.y+Math.sin(angle)*r,
+    hp:t.hp*sc,maxHp:t.hp*sc,speed:t.speed*(1+timeLvl*0.04),dmg:t.dmg,size:t.size,
+    color:t.color,exp:t.exp,shape:t.shape,isBoss:false,flash:0,angle:Math.random()*Math.PI*2,
+    canShoot,shootT:1+Math.random()*2,shootCd:2.2+Math.random()*1.5,
+    bulletSpd:2.8+timeLvl*0.2,bulletDmg:5+timeLvl*1.5});
 }
 
 function triggerBoss(idx){
   const g=G,b=BOSSES[idx];
   const angle=Math.random()*Math.PI*2,r=Math.max(W,H)*0.52;
-  const boss={
-    x:g.pl.x+Math.cos(angle)*r,y:g.pl.y+Math.sin(angle)*r,
+  const boss={x:g.pl.x+Math.cos(angle)*r,y:g.pl.y+Math.sin(angle)*r,
     hp:b.hp,maxHp:b.hp,speed:b.speed,dmg:b.dmg,size:b.size,
-    color:b.color,exp:b.exp,shape:'boss',
-    isBoss:true,flash:0,angle:0,
-    name:b.name,shootT:0,bossRef:b,
-  };
-  g.enemies.push(boss); g.curBoss=boss;
+    color:b.color,exp:b.exp,shape:'boss',isBoss:true,flash:0,angle:0,
+    name:b.name,shootT:0,bossRef:b};
+  g.enemies.push(boss);g.curBoss=boss;
   document.getElementById('bossBar').style.display='block';
   document.getElementById('bossBarName').textContent='⚠ '+b.name.toUpperCase()+' ⚠';
   document.getElementById('bossBarFill').style.width='100%';
   document.getElementById('bossAlertName').textContent=b.name;
   const al=document.getElementById('bossAlert');
-  al.style.display='block'; setTimeout(()=>al.style.display='none',3200);
-  document.getElementById('bioBox').innerHTML=`<strong>⚠ BOSS!</strong><br>${b.name}<br><span style="font-size:9px;color:#fca5a5">Ele atira! Mantenha distância!</span>`;
+  al.style.display='block';setTimeout(()=>al.style.display='none',3200);
+  document.getElementById('bioBox').innerHTML=`<strong>⚠ BOSS!</strong><br>${b.name}<br><span style="font-size:11px;color:#fca5a5">Ele atira! Mantenha distância!</span>`;
   playSfx(70,1.2,0.18,'sawtooth');
 }
 
 function showBossKill(bref){
   G.paused=true;
-  document.getElementById('bossKillCard').innerHTML=
-    `<strong style="font-size:13px">📚 ${bref.lesson.title}</strong><br><br>${bref.lesson.text}`;
+  document.getElementById('bossKillCard').innerHTML=`<strong style="font-size:14px">📚 ${bref.lesson.title}</strong><br><br>${bref.lesson.text}`;
   document.getElementById('bossKillPanel').style.display='flex';
 }
-function closeBossKill(){
-  document.getElementById('bossKillPanel').style.display='none';
-  G.paused=false;
-}
+function closeBossKill(){document.getElementById('bossKillPanel').style.display='none';G.paused=false;}
 
-// ═══════════════════════════════════════════
+// ═══════════════════════════
 // COMBATE
-// ═══════════════════════════════════════════
+// ═══════════════════════════
 function autoShoot(){
   const g=G,p=g.pl;
   const sorted=[...g.enemies].sort((a,b)=>dist2(p,a)-dist2(p,b));
-  if(!sorted.length) return;
+  if(!sorted.length)return;
   const tgt=sorted[0];
   const baseAngle=Math.atan2(tgt.y-p.y,tgt.x-p.x);
-  const shots=p.multiShot;
-  // todos os projéteis saem na MESMA direção, com leve spread
-  for(let i=0;i<shots;i++){
-    const spread=(i-(shots-1)/2)*0.12; // spread pequeno → ficam juntos
+  for(let i=0;i<p.multiShot;i++){
+    const spread=(i-(p.multiShot-1)/2)*0.11;
     const a=baseAngle+spread;
-    g.bullets.push({
-      x:p.x,y:p.y,
-      vx:Math.cos(a)*5.8,vy:Math.sin(a)*5.8,
-      dmg:p.baseDmg,size:6,
-      range:p.bulletRange,traveled:0,pierce:p.pierce,
-    });
+    g.bullets.push({x:p.x,y:p.y,vx:Math.cos(a)*6,vy:Math.sin(a)*6,
+      dmg:p.baseDmg,size:6,range:p.bulletRange,traveled:0,pierce:p.pierce});
   }
-  playSfx(320+Math.random()*80,0.06,0.04,'triangle');
+  playSfx(330+Math.random()*80,0.06,0.04,'triangle');
 }
 
 function spawnXpOrbs(x,y,total){
   const count=Math.min(total,6);
   for(let i=0;i<count;i++){
-    const a=Math.random()*Math.PI*2,r=Math.random()*18;
+    const a=Math.random()*Math.PI*2,r=Math.random()*16;
     G.xpOrbs.push({x:x+Math.cos(a)*r,y:y+Math.sin(a)*r,val:total/count,life:10});
   }
 }
-
 function addParticle(x,y,color,r){
-  for(let i=0;i<4;i++){
-    const a=Math.random()*Math.PI*2,sp=Math.random()*2.5+0.5;
-    G.particles.push({x,y,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp,color,r:r*(0.5+Math.random()),life:0.4+Math.random()*0.2});
-  }
+  for(let i=0;i<4;i++){const a=Math.random()*Math.PI*2,sp=Math.random()*2.5+0.5;
+    G.particles.push({x,y,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp,color,r:r*(0.5+Math.random()),life:0.4+Math.random()*0.2});}
 }
 function dist2(a,b){const dx=a.x-b.x,dy=a.y-b.y;return Math.sqrt(dx*dx+dy*dy);}
 
-// ═══════════════════════════════════════════
+// ═══════════════════════════
 // UPGRADES
-// ═══════════════════════════════════════════
+// ═══════════════════════════
 function showUpgrades(){
   G.paused=true;
-  const curio=CURIOSIDADES[Math.floor(Math.random()*CURIOSIDADES.length)];
-  document.getElementById('upCurioTxt').textContent=curio;
+  document.getElementById('upCurioTxt').textContent=CURIOS[Math.floor(Math.random()*CURIOS.length)];
   document.getElementById('upSub').textContent=`Nível ${G.pl.level} alcançado! Escolha uma melhoria:`;
-  const cont=document.getElementById('upCards'); cont.innerHTML='';
-  const opts=[...UPGRADES].sort(()=>Math.random()-0.5).slice(0,3);
-  opts.forEach(u=>{
-    const d=document.createElement('div'); d.className='upCard';
-    d.innerHTML=`
-      <div class="upTop">
-        <div class="upIcon" style="background:${u.color}22;border-color:${u.color};color:${u.color}">${u.icon}</div>
-        <div class="upTitle" style="color:${u.color}">${u.title}</div>
-      </div>
+  const cont=document.getElementById('upCards');cont.innerHTML='';
+  [...UPGRADES].sort(()=>Math.random()-0.5).slice(0,3).forEach(u=>{
+    const d=document.createElement('div');d.className='upCard';
+    d.innerHTML=`<div class="upTop">
+      <div class="upIcon" style="background:${u.color}22;border-color:${u.color};color:${u.color}">${u.icon}</div>
+      <div class="upTitle" style="color:${u.color}">${u.title}</div></div>
       <div class="upDesc">${u.desc}</div>
       <div class="upBio">📚 ${u.bio}</div>`;
     d.onclick=()=>{u.apply(G);document.getElementById('upgradePanel').style.display='none';G.paused=false;playSfx(520,0.3,0.1,'triangle');};
@@ -851,9 +788,9 @@ function showUpgrades(){
   playSfx(440,0.5,0.12,'sine');
 }
 
-// ═══════════════════════════════════════════
+// ═══════════════════════════
 // HUD
-// ═══════════════════════════════════════════
+// ═══════════════════════════
 function updateHUD(){
   const g=G,p=g.pl;
   document.getElementById('hpFill').style.width=(p.hp/p.maxHp*100)+'%';
@@ -866,16 +803,16 @@ function updateHUD(){
   document.getElementById('killTxt').textContent='☠ '+g.kills;
 }
 
-// ═══════════════════════════════════════════
+// ═══════════════════════════
 // FIM DE JOGO
-// ═══════════════════════════════════════════
+// ═══════════════════════════
 function endGame(win){
   G.dead=true;
   if(win){
     document.getElementById('victoryLesson').innerHTML=`
-<strong>🏆 RESUMO COMPLETO — LISOSSOMOS</strong><br><br>
+<strong>🏆 RESUMO — LISOSSOMOS</strong><br><br>
 <strong>O que são?</strong><br>
-Organelas membranosas de células <em>eucariotas animais</em>. Descobertas por <em>Christian de Duve (1955, Nobel 1974)</em>. pH interno ~4,5 e ~50 tipos de enzimas hidrolíticas.<br><br>
+Organelas membranosas de células <em>eucariotas animais</em>. Descobertas por <em>Christian de Duve (1955, Nobel 1974)</em>. pH interno ~4,5 com ~50 tipos de enzimas hidrolíticas.<br><br>
 <strong>5 Funções Principais:</strong><br>
 1. <em>Digestão intracelular</em> — destroem bactérias e vírus por fagocitose<br>
 2. <em>Autofagia</em> — reciclagem de organelas danificadas (Nobel 2016)<br>
@@ -883,24 +820,24 @@ Organelas membranosas de células <em>eucariotas animais</em>. Descobertas por <
 4. <em>Exocitose</em> — liberam enzimas para remodelamento extracelular<br>
 5. <em>Reparo de membrana</em> — fusão com membrana plasmática danificada<br><br>
 <strong>Enzimas Lisossomais:</strong><br>
-• <b>Catepsinas (B, D, L)</b>: proteases que degradam proteínas<br>
+• <b>Catepsinas B, D, L</b>: proteases que degradam proteínas<br>
 • <b>Lipases ácidas</b>: quebram lipídios e fosfolipídios<br>
 • <b>DNases / RNases</b>: destroem material genético de patógenos<br>
 • <b>Glicosilases</b>: hidrolisam polissacarídeos<br><br>
-<strong>Regulação:</strong><br>
-<em>TFEB</em> é o master regulator dos genes lisossomais. <em>mTORC1</em> o inibe quando há nutrientes. Em jejum ou estresse, TFEB migra ao núcleo e ativa >400 genes lisossomais e autofágicos.<br><br>
-<strong>Doenças de Depósito Lisossomal:</strong><br>
-• <em>Gaucher</em>: acúmulo de glicocerebrosídeo (1:40.000 — mais comum)<br>
+<strong>Doenças de Depósito:</strong><br>
+• <em>Gaucher</em>: acúmulo de glicocerebrosídeo (mais comum)<br>
 • <em>Tay-Sachs</em>: acúmulo de GM2 em neurônios (letal na infância)<br>
-• <em>Pompe</em>: acúmulo de glicogênio no coração<br>
-• <em>Niemann-Pick C</em>: acúmulo de colesterol (proteína NPC1 defeituosa)<br><br>
+• <em>Pompe</em>: acúmulo de glicogênio cardíaco<br>
+• <em>Niemann-Pick C</em>: acúmulo de colesterol (NPC1 defeituosa)<br><br>
+<strong>Regulação:</strong><br>
+<em>TFEB</em> regula +400 genes lisossomais. Em jejum, mTORC1 é inibido → TFEB vai ao núcleo → ativa lisossomos e autofagia.<br><br>
 <strong>Curiosidades:</strong><br>
 • Lisossomos <em>não existem</em> em plantas — vacúolos têm função equivalente<br>
 • Alguns vírus (Ebola, COVID-19) usam catepsinas lisossomais como "porta de entrada"<br>
-• A V-ATPase bombeia H⁺ continuamente para manter o pH 4,5 interno`;
+• A V-ATPase bombeia H⁺ continuamente para manter pH 4,5 interno`;
     document.getElementById('victoryScreen').style.display='flex';
   } else {
-    const el=Math.floor(240-G.timeLeft);
+    const el=Math.floor(150-G.timeLeft);
     document.getElementById('goKills').textContent=G.kills;
     document.getElementById('goLvl').textContent=G.pl.level;
     document.getElementById('goTime').textContent=Math.floor(el/60)+':'+(el%60<10?'0':'')+(el%60);
@@ -908,293 +845,209 @@ Organelas membranosas de células <em>eucariotas animais</em>. Descobertas por <
   }
 }
 
-// ═══════════════════════════════════════════
+// ═══════════════════════════
 // RENDER
-// ═══════════════════════════════════════════
+// ═══════════════════════════
 function render(){
-  if(bgCanvas) ctx.drawImage(bgCanvas,0,0);
+  if(bgCanvas)ctx.drawImage(bgCanvas,0,0);
   else{ctx.fillStyle='#04040f';ctx.fillRect(0,0,W,H);}
-  if(!G) return;
+  if(!G)return;
   const g=G,p=g.pl;
 
-  // partículas
   g.particles.forEach(pt=>{
     ctx.save();ctx.globalAlpha=Math.min(1,pt.life*2.5);
-    ctx.fillStyle=pt.color;
-    ctx.beginPath();ctx.arc(pt.x,pt.y,Math.max(0.1,pt.r),0,Math.PI*2);ctx.fill();
-    ctx.restore();
+    ctx.fillStyle=pt.color;ctx.beginPath();ctx.arc(pt.x,pt.y,Math.max(0.1,pt.r),0,Math.PI*2);ctx.fill();ctx.restore();
   });
 
-  // aura DO PLAYER — anel laranja bem visível
+  // aura laranja bem visível
   if(p.aura>0){
     const t=Date.now()/600;
-    // anel pulsante externo
-    ctx.save();
-    ctx.globalAlpha=0.18+Math.sin(t)*0.08;
-    ctx.strokeStyle='#fb923c';ctx.lineWidth=3;
-    ctx.shadowColor='#fb923c';ctx.shadowBlur=20;
-    ctx.beginPath();ctx.arc(p.x,p.y,p.aura,0,Math.PI*2);ctx.stroke();
-    ctx.restore();
-    // preenchimento suave
-    ctx.save();
-    ctx.globalAlpha=0.06+Math.sin(t*1.3)*0.03;
+    ctx.save();ctx.globalAlpha=0.2+Math.sin(t)*0.09;ctx.strokeStyle='#fb923c';ctx.lineWidth=4;
+    ctx.shadowColor='#fb923c';ctx.shadowBlur=22;
+    ctx.beginPath();ctx.arc(p.x,p.y,p.aura,0,Math.PI*2);ctx.stroke();ctx.restore();
+    ctx.save();ctx.globalAlpha=0.06+Math.sin(t*1.3)*0.03;
     const ag=ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,p.aura);
-    ag.addColorStop(0,'transparent');ag.addColorStop(0.7,'#fb923c44');ag.addColorStop(1,'#fb923caa');
-    ctx.fillStyle=ag;
-    ctx.beginPath();ctx.arc(p.x,p.y,p.aura,0,Math.PI*2);ctx.fill();
-    ctx.restore();
-    // partículas de enzima na borda
-    if(g.frame%6===0){
-      const a=Math.random()*Math.PI*2;
-      addParticle(p.x+Math.cos(a)*p.aura,p.y+Math.sin(a)*p.aura,'#fb923c',3);
-    }
+    ag.addColorStop(0,'transparent');ag.addColorStop(0.65,'#fb923c33');ag.addColorStop(1,'#fb923c99');
+    ctx.fillStyle=ag;ctx.beginPath();ctx.arc(p.x,p.y,p.aura,0,Math.PI*2);ctx.fill();ctx.restore();
+    if(g.frame%5===0){const a=Math.random()*Math.PI*2;addParticle(p.x+Math.cos(a)*p.aura,p.y+Math.sin(a)*p.aura,'#fb923c',3);}
   }
 
-  // balas do player — agrupadas visualmente
+  // balas player com rastro
   g.bullets.forEach(b=>{
-    ctx.save();
-    ctx.shadowColor='#d946ef';ctx.shadowBlur=14;
-    ctx.fillStyle='#f0abfc';
+    ctx.save();ctx.shadowColor='#d946ef';ctx.shadowBlur=14;ctx.fillStyle='#f0abfc';
     ctx.beginPath();ctx.arc(b.x,b.y,b.size,0,Math.PI*2);ctx.fill();
-    // rastro
-    ctx.globalAlpha=0.35;ctx.fillStyle='#a855f7';
-    ctx.beginPath();ctx.arc(b.x-b.vx*1.5,b.y-b.vy*1.5,b.size*0.7,0,Math.PI*2);ctx.fill();
-    ctx.restore();
+    ctx.globalAlpha=0.32;ctx.fillStyle='#a855f7';
+    ctx.beginPath();ctx.arc(b.x-b.vx*1.5,b.y-b.vy*1.5,b.size*0.7,0,Math.PI*2);ctx.fill();ctx.restore();
   });
 
-  // balas bosses
+  // balas inimigas (boss: vermelhas | normais: laranja)
   g.enemyBullets.forEach(b=>{
-    ctx.save();
-    ctx.shadowColor='#dc2626';ctx.shadowBlur=12;
-    ctx.fillStyle='#f87171';
+    const col=b.isBoss?'#f87171':'#fb923c';
+    const trail=b.isBoss?'#7f1d1d':'#7c2d12';
+    ctx.save();ctx.shadowColor=col;ctx.shadowBlur=12;ctx.fillStyle=col;
     ctx.beginPath();ctx.arc(b.x,b.y,b.size,0,Math.PI*2);ctx.fill();
-    ctx.globalAlpha=0.3;ctx.fillStyle='#7f1d1d';
-    ctx.beginPath();ctx.arc(b.x-b.vx*1.2,b.y-b.vy*1.2,b.size*0.6,0,Math.PI*2);ctx.fill();
-    ctx.restore();
+    ctx.globalAlpha=0.28;ctx.fillStyle=trail;
+    ctx.beginPath();ctx.arc(b.x-b.vx*1.2,b.y-b.vy*1.2,b.size*0.6,0,Math.PI*2);ctx.fill();ctx.restore();
   });
 
-  // orbs XP
+  // orbs XP pulsantes
   g.xpOrbs.forEach(o=>{
-    const t=Date.now()/200+o.x;
-    ctx.save();
-    ctx.shadowColor='#38bdf8';ctx.shadowBlur=12;
-    ctx.fillStyle='#7dd3fc';
+    const t=Date.now()/180+o.x;
+    ctx.save();ctx.shadowColor='#38bdf8';ctx.shadowBlur=12;ctx.fillStyle='#7dd3fc';
     ctx.beginPath();ctx.arc(o.x,o.y,6,0,Math.PI*2);ctx.fill();
-    ctx.strokeStyle='#bae6fd';ctx.lineWidth=1.5;ctx.globalAlpha=0.6;
-    ctx.beginPath();ctx.arc(o.x,o.y,7+Math.sin(t)*2,0,Math.PI*2);ctx.stroke();
-    ctx.restore();
+    ctx.strokeStyle='#bae6fd';ctx.lineWidth=1.5;ctx.globalAlpha=0.55;
+    ctx.beginPath();ctx.arc(o.x,o.y,7+Math.sin(t)*2,0,Math.PI*2);ctx.stroke();ctx.restore();
   });
 
   // inimigos
   g.enemies.forEach(e=>{
-    ctx.save();
-    if(e.flash>0) ctx.globalAlpha=0.35;
-    ctx.translate(e.x,e.y); ctx.rotate(e.angle);
-    if(e.isBoss) drawBoss(e);
-    else drawEnemyShape(e);
+    ctx.save();if(e.flash>0)ctx.globalAlpha=0.35;
+    ctx.translate(e.x,e.y);ctx.rotate(e.angle);
+    if(e.isBoss)drawBoss(e);else drawEnemyShape(e);
     ctx.restore();
-    // hp bar
-    const bw=e.size*2.6,bh=6;
-    ctx.fillStyle='rgba(10,10,40,0.8)';ctx.fillRect(e.x-bw/2,e.y-e.size-13,bw,bh);
-    ctx.fillStyle=e.isBoss?'#ef4444':'#22c55e';
-    ctx.fillRect(e.x-bw/2,e.y-e.size-13,bw*(e.hp/e.maxHp),bh);
-    // NOME DO BOSS na cabeça
+    // barra de vida APENAS nos bosses
     if(e.isBoss){
-      ctx.save();
-      ctx.font='bold 11px "Orbitron",monospace';
-      ctx.textAlign='center';
-      ctx.fillStyle='#fde68a';
-      ctx.shadowColor='#d97706';ctx.shadowBlur=8;
-      ctx.fillText(e.name.toUpperCase(),e.x,e.y-e.size-18);
-      ctx.restore();
+      const bw=e.size*2.6,bh=6;
+      ctx.fillStyle='rgba(8,8,36,0.8)';ctx.fillRect(e.x-bw/2,e.y-e.size-14,bw,bh);
+      ctx.fillStyle='#ef4444';
+      ctx.fillRect(e.x-bw/2,e.y-e.size-14,bw*(e.hp/e.maxHp),bh);
+      ctx.save();ctx.font='bold 12px "Orbitron",monospace';ctx.textAlign='center';
+      ctx.fillStyle='#fde68a';ctx.shadowColor='#d97706';ctx.shadowBlur=10;
+      ctx.fillText(e.name.toUpperCase(),e.x,e.y-e.size-20);ctx.restore();
     }
   });
 
-  // player
   drawPlayer(p);
 }
 
 function drawPlayer(p){
   const t=Date.now()/700,pulse=1+Math.sin(t*1.5)*0.06,r=22*pulse;
-  ctx.save(); ctx.translate(p.x,p.y);
-  // glow externo
-  ctx.save();ctx.globalAlpha=0.15;ctx.shadowColor='#a855f7';ctx.shadowBlur=40;
-  ctx.fillStyle='#a855f7';ctx.beginPath();ctx.arc(0,0,r*1.7,0,Math.PI*2);ctx.fill();ctx.restore();
-  // membrana irregular
-  ctx.save();ctx.shadowColor='#a855f7';ctx.shadowBlur=22;
+  ctx.save();ctx.translate(p.x,p.y);
+  ctx.save();ctx.globalAlpha=0.15;ctx.shadowColor='#a855f7';ctx.shadowBlur=42;
+  ctx.fillStyle='#a855f7';ctx.beginPath();ctx.arc(0,0,r*1.75,0,Math.PI*2);ctx.fill();ctx.restore();
+  ctx.save();ctx.shadowColor='#a855f7';ctx.shadowBlur=24;
   const ig=ctx.createRadialGradient(-5,-5,2,0,0,r);
   ig.addColorStop(0,'#c084fc');ig.addColorStop(0.5,'#7c3aed');ig.addColorStop(1,'#4c1d95');
-  ctx.fillStyle=ig; ctx.beginPath();
-  for(let i=0;i<10;i++){
-    const a=(i/10)*Math.PI*2,j=1+0.16*Math.sin(t*2+i*1.4);
-    const px=Math.cos(a)*r*j,py=Math.sin(a)*r*j;
-    i===0?ctx.moveTo(px,py):ctx.lineTo(px,py);
-  }
+  ctx.fillStyle=ig;ctx.beginPath();
+  for(let i=0;i<10;i++){const a=(i/10)*Math.PI*2,j=1+0.17*Math.sin(t*2+i*1.4);
+    const px=Math.cos(a)*r*j,py=Math.sin(a)*r*j;i===0?ctx.moveTo(px,py):ctx.lineTo(px,py);}
   ctx.closePath();ctx.fill();
-  ctx.strokeStyle='rgba(192,132,252,0.7)';ctx.lineWidth=2.2;ctx.stroke();
-  ctx.restore();
-  // enzimas internas girando
-  for(let i=0;i<6;i++){
-    const a=t*1.0+i*Math.PI*2/6,ox=Math.cos(a)*11,oy=Math.sin(a)*11;
-    ctx.fillStyle=`hsl(${280+i*25},80%,72%)`;
-    ctx.beginPath();ctx.arc(ox,oy,2.8,0,Math.PI*2);ctx.fill();
-  }
-  // anel de enzimas externo
-  for(let i=0;i<4;i++){
-    const a=-t*0.6+i*Math.PI*2/4,ox=Math.cos(a)*17,oy=Math.sin(a)*17;
-    ctx.fillStyle='rgba(240,171,252,0.55)';
-    ctx.beginPath();ctx.arc(ox,oy,2,0,Math.PI*2);ctx.fill();
-  }
-  // vacúolo ácido interno
-  ctx.fillStyle='rgba(255,255,255,0.12)';
-  ctx.beginPath();ctx.ellipse(-4,-4,9,7,t*0.4,0,Math.PI*2);ctx.fill();
-  // label
-  ctx.fillStyle='rgba(255,255,255,0.9)';ctx.font='bold 9px "Orbitron",monospace';
-  ctx.textAlign='center';ctx.fillText('Ls',0,3);
+  ctx.strokeStyle='rgba(192,132,252,0.72)';ctx.lineWidth=2.2;ctx.stroke();ctx.restore();
+  for(let i=0;i<6;i++){const a=t*1.0+i*Math.PI*2/6,ox=Math.cos(a)*11,oy=Math.sin(a)*11;
+    ctx.fillStyle=`hsl(${280+i*25},80%,72%)`;ctx.beginPath();ctx.arc(ox,oy,2.8,0,Math.PI*2);ctx.fill();}
+  for(let i=0;i<4;i++){const a=-t*0.6+i*Math.PI*2/4,ox=Math.cos(a)*17,oy=Math.sin(a)*17;
+    ctx.fillStyle='rgba(240,171,252,0.52)';ctx.beginPath();ctx.arc(ox,oy,2,0,Math.PI*2);ctx.fill();}
+  ctx.fillStyle='rgba(255,255,255,0.12)';ctx.beginPath();ctx.ellipse(-4,-4,9,7,t*0.4,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle='rgba(255,255,255,0.9)';ctx.font='bold 9px "Orbitron",monospace';ctx.textAlign='center';ctx.fillText('Ls',0,3);
   ctx.restore();
 }
 
-// ─── INIMIGOS ───────────────────────────────
 function drawEnemyShape(e){
   switch(e.shape){
-    case 'coco':    drawCoco(e); break;
-    case 'bacilo':  drawBacilo(e); break;
-    case 'espiral': drawEspiral(e); break;
-    case 'hex':     drawHex(e); break;
-    case 'spike':   drawSpike(e); break;
-    case 'capsid':  drawCapsid(e); break;
-    case 'fungo':   drawFungo(e); break;
-    case 'prion':   drawPrion(e); break;
-    default:        drawCoco(e);
+    case 'coco':ctx.shadowColor=e.color;ctx.shadowBlur=8;ctx.fillStyle=e.color;ctx.beginPath();ctx.arc(0,0,e.size,0,Math.PI*2);ctx.fill();ctx.strokeStyle='rgba(0,0,0,0.3)';ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(-e.size,0);ctx.lineTo(e.size,0);ctx.stroke();break;
+    case 'bacilo':ctx.shadowColor=e.color;ctx.shadowBlur=8;ctx.fillStyle=e.color;ctx.beginPath();ctx.ellipse(0,0,e.size*1.85,e.size*0.65,0,0,Math.PI*2);ctx.fill();ctx.strokeStyle=e.color;ctx.lineWidth=1.5;ctx.globalAlpha=0.5;ctx.beginPath();ctx.moveTo(e.size*1.85,0);for(let i=0;i<6;i++)ctx.lineTo(e.size*1.85+5+i*3.5,Math.sin(i*1.5+(Date.now()/200))*5);ctx.stroke();ctx.globalAlpha=1;break;
+    case 'espiral':ctx.shadowColor=e.color;ctx.shadowBlur=7;ctx.strokeStyle=e.color;ctx.lineWidth=3;ctx.lineCap='round';ctx.beginPath();for(let i=0;i<24;i++){const tt=i/24,a=tt*Math.PI*4;ctx.lineTo((tt-0.5)*e.size*2.6,Math.sin(a)*e.size*0.55);}ctx.stroke();ctx.fillStyle=e.color;ctx.beginPath();ctx.arc(-e.size*1.2,0,3.5,0,Math.PI*2);ctx.fill();ctx.beginPath();ctx.arc(e.size*1.2,0,3.5,0,Math.PI*2);ctx.fill();break;
+    case 'hex':ctx.shadowColor=e.color;ctx.shadowBlur=14;ctx.fillStyle=e.color;ctx.beginPath();for(let i=0;i<6;i++){const a=(i/6)*Math.PI*2;i===0?ctx.moveTo(Math.cos(a)*e.size,Math.sin(a)*e.size):ctx.lineTo(Math.cos(a)*e.size,Math.sin(a)*e.size);}ctx.closePath();ctx.fill();ctx.strokeStyle='rgba(255,255,255,0.3)';ctx.lineWidth=1;for(let i=0;i<6;i++){const a=(i/6)*Math.PI*2;ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(Math.cos(a)*e.size,Math.sin(a)*e.size);ctx.stroke();}break;
+    case 'spike':ctx.shadowColor=e.color;ctx.shadowBlur=14;ctx.fillStyle=e.color;ctx.beginPath();ctx.arc(0,0,e.size*0.62,0,Math.PI*2);ctx.fill();ctx.strokeStyle=e.color;ctx.lineWidth=2;for(let i=0;i<8;i++){const a=(i/8)*Math.PI*2,r0=e.size*0.62,r1=e.size;ctx.beginPath();ctx.moveTo(Math.cos(a)*r0,Math.sin(a)*r0);ctx.lineTo(Math.cos(a)*r1,Math.sin(a)*r1);ctx.stroke();ctx.fillStyle=e.color;ctx.beginPath();ctx.arc(Math.cos(a)*r1,Math.sin(a)*r1,2.5,0,Math.PI*2);ctx.fill();}break;
+    case 'capsid':ctx.shadowColor=e.color;ctx.shadowBlur=14;for(let i=0;i<5;i++){const a=(i/5)*Math.PI*2;ctx.fillStyle=`hsl(${265+i*18},70%,${38+i*6}%)`;ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(Math.cos(a)*e.size,Math.sin(a)*e.size);ctx.lineTo(Math.cos(a+Math.PI*0.4)*e.size,Math.sin(a+Math.PI*0.4)*e.size);ctx.closePath();ctx.fill();ctx.strokeStyle='rgba(255,255,255,0.18)';ctx.lineWidth=0.8;ctx.stroke();}break;
+    case 'fungo':ctx.shadowColor=e.color;ctx.shadowBlur=9;ctx.fillStyle=e.color;ctx.beginPath();ctx.ellipse(0,2,e.size*0.72,e.size,0,0,Math.PI*2);ctx.fill();ctx.fillStyle='rgba(255,255,255,0.18)';ctx.beginPath();ctx.ellipse(-3,-3,e.size*0.3,e.size*0.42,0,0,Math.PI*2);ctx.fill();ctx.strokeStyle=e.color;ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(-e.size*0.5,e.size);ctx.lineTo(-e.size*0.85,e.size*1.55);ctx.stroke();ctx.beginPath();ctx.moveTo(e.size*0.5,e.size);ctx.lineTo(e.size*0.9,e.size*1.55);ctx.stroke();break;
+    case 'prion':ctx.shadowColor=e.color;ctx.shadowBlur=7;ctx.fillStyle=e.color;ctx.beginPath();for(let i=0;i<7;i++){const a=(i/7)*Math.PI*2,r=e.size*(0.58+0.42*Math.sin(i*2.4+0.9));i===0?ctx.moveTo(Math.cos(a)*r,Math.sin(a)*r):ctx.lineTo(Math.cos(a)*r,Math.sin(a)*r);}ctx.closePath();ctx.fill();ctx.strokeStyle='rgba(255,80,80,0.5)';ctx.lineWidth=1.2;ctx.beginPath();ctx.moveTo(-e.size*0.32,-e.size*0.32);ctx.lineTo(e.size*0.32,e.size*0.32);ctx.stroke();break;
+    default:ctx.fillStyle=e.color;ctx.beginPath();ctx.arc(0,0,e.size,0,Math.PI*2);ctx.fill();
   }
-}
-
-function drawCoco(e){
-  ctx.shadowColor=e.color;ctx.shadowBlur=8;ctx.fillStyle=e.color;
-  ctx.beginPath();ctx.arc(0,0,e.size,0,Math.PI*2);ctx.fill();
-  ctx.strokeStyle='rgba(0,0,0,0.3)';ctx.lineWidth=1.5;
-  ctx.beginPath();ctx.moveTo(-e.size,0);ctx.lineTo(e.size,0);ctx.stroke();
-  ctx.strokeStyle='rgba(255,255,255,0.15)';ctx.lineWidth=1;
-  ctx.beginPath();ctx.arc(0,0,e.size*0.55,0,Math.PI*2);ctx.stroke();
-}
-function drawBacilo(e){
-  ctx.shadowColor=e.color;ctx.shadowBlur=8;ctx.fillStyle=e.color;
-  ctx.beginPath();ctx.ellipse(0,0,e.size*1.85,e.size*0.65,0,0,Math.PI*2);ctx.fill();
-  ctx.strokeStyle=e.color;ctx.lineWidth=1.5;ctx.globalAlpha=0.55;
-  ctx.beginPath();ctx.moveTo(e.size*1.85,0);
-  for(let i=0;i<6;i++){ctx.lineTo(e.size*1.85+5+i*3.5,Math.sin(i*1.5+(Date.now()/200))*5);}
-  ctx.stroke();ctx.globalAlpha=1;
-  ctx.strokeStyle='rgba(0,0,0,0.2)';ctx.lineWidth=1;
-  ctx.beginPath();ctx.ellipse(0,0,e.size*1.85,e.size*0.65,0,0,Math.PI*2);ctx.stroke();
-}
-function drawEspiral(e){
-  ctx.shadowColor=e.color;ctx.shadowBlur=7;ctx.strokeStyle=e.color;ctx.lineWidth=3;ctx.lineCap='round';
-  ctx.beginPath();
-  for(let i=0;i<24;i++){const t=i/24,a=t*Math.PI*4;ctx.lineTo((t-0.5)*e.size*2.6,Math.sin(a)*e.size*0.55);}
-  ctx.stroke();
-  ctx.fillStyle=e.color;
-  ctx.beginPath();ctx.arc(-e.size*1.2,0,3.5,0,Math.PI*2);ctx.fill();
-  ctx.beginPath();ctx.arc(e.size*1.2,0,3.5,0,Math.PI*2);ctx.fill();
-}
-function drawHex(e){
-  ctx.shadowColor=e.color;ctx.shadowBlur=14;ctx.fillStyle=e.color;
-  ctx.beginPath();
-  for(let i=0;i<6;i++){const a=(i/6)*Math.PI*2;i===0?ctx.moveTo(Math.cos(a)*e.size,Math.sin(a)*e.size):ctx.lineTo(Math.cos(a)*e.size,Math.sin(a)*e.size);}
-  ctx.closePath();ctx.fill();
-  ctx.strokeStyle='rgba(255,255,255,0.3)';ctx.lineWidth=1;
-  for(let i=0;i<6;i++){const a=(i/6)*Math.PI*2;ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(Math.cos(a)*e.size,Math.sin(a)*e.size);ctx.stroke();}
-}
-function drawSpike(e){
-  ctx.shadowColor=e.color;ctx.shadowBlur=14;ctx.fillStyle=e.color;
-  ctx.beginPath();ctx.arc(0,0,e.size*0.62,0,Math.PI*2);ctx.fill();
-  ctx.strokeStyle=e.color;ctx.lineWidth=2;
-  for(let i=0;i<8;i++){
-    const a=(i/8)*Math.PI*2,r0=e.size*0.62,r1=e.size;
-    ctx.beginPath();ctx.moveTo(Math.cos(a)*r0,Math.sin(a)*r0);ctx.lineTo(Math.cos(a)*r1,Math.sin(a)*r1);ctx.stroke();
-    ctx.fillStyle=e.color;ctx.beginPath();ctx.arc(Math.cos(a)*r1,Math.sin(a)*r1,2.5,0,Math.PI*2);ctx.fill();
-  }
-}
-function drawCapsid(e){
-  ctx.shadowColor=e.color;ctx.shadowBlur=14;
-  for(let i=0;i<5;i++){
-    const a=(i/5)*Math.PI*2;
-    ctx.fillStyle=`hsl(${265+i*18},70%,${38+i*6}%)`;
-    ctx.beginPath();ctx.moveTo(0,0);
-    ctx.lineTo(Math.cos(a)*e.size,Math.sin(a)*e.size);
-    ctx.lineTo(Math.cos(a+Math.PI*0.4)*e.size,Math.sin(a+Math.PI*0.4)*e.size);
-    ctx.closePath();ctx.fill();
-    ctx.strokeStyle='rgba(255,255,255,0.18)';ctx.lineWidth=0.8;ctx.stroke();
-  }
-}
-function drawFungo(e){
-  ctx.shadowColor=e.color;ctx.shadowBlur=9;ctx.fillStyle=e.color;
-  ctx.beginPath();ctx.ellipse(0,2,e.size*0.72,e.size,0,0,Math.PI*2);ctx.fill();
-  ctx.fillStyle='rgba(255,255,255,0.18)';
-  ctx.beginPath();ctx.ellipse(-3,-3,e.size*0.3,e.size*0.42,0,0,Math.PI*2);ctx.fill();
-  ctx.strokeStyle=e.color;ctx.lineWidth=2;
-  ctx.beginPath();ctx.moveTo(-e.size*0.5,e.size);ctx.lineTo(-e.size*0.85,e.size*1.55);ctx.stroke();
-  ctx.beginPath();ctx.moveTo(e.size*0.5,e.size);ctx.lineTo(e.size*0.9,e.size*1.55);ctx.stroke();
-}
-function drawPrion(e){
-  ctx.shadowColor=e.color;ctx.shadowBlur=7;ctx.fillStyle=e.color;
-  ctx.beginPath();
-  for(let i=0;i<7;i++){const a=(i/7)*Math.PI*2,r=e.size*(0.58+0.42*Math.sin(i*2.4+0.9));i===0?ctx.moveTo(Math.cos(a)*r,Math.sin(a)*r):ctx.lineTo(Math.cos(a)*r,Math.sin(a)*r);}
-  ctx.closePath();ctx.fill();
-  ctx.strokeStyle='rgba(255,80,80,0.5)';ctx.lineWidth=1.2;
-  ctx.beginPath();ctx.moveTo(-e.size*0.32,-e.size*0.32);ctx.lineTo(e.size*0.32,e.size*0.32);ctx.stroke();
 }
 
 function drawBoss(e){
   const f=G.frame;
-  ctx.shadowColor=e.color;ctx.shadowBlur=35;
-  // corpo espinhoso girante
-  ctx.fillStyle=e.color;ctx.beginPath();
-  for(let i=0;i<20;i++){
-    const a=(i/10)*Math.PI+f*0.014,r=i%2===0?e.size:e.size*0.58;
-    i===0?ctx.moveTo(Math.cos(a)*r,Math.sin(a)*r):ctx.lineTo(Math.cos(a)*r,Math.sin(a)*r);
-  }
+  ctx.shadowColor=e.color;ctx.shadowBlur=35;ctx.fillStyle=e.color;ctx.beginPath();
+  for(let i=0;i<20;i++){const a=(i/10)*Math.PI+f*0.014,r=i%2===0?e.size:e.size*0.58;
+    i===0?ctx.moveTo(Math.cos(a)*r,Math.sin(a)*r):ctx.lineTo(Math.cos(a)*r,Math.sin(a)*r);}
   ctx.closePath();ctx.fill();
   ctx.fillStyle='rgba(0,0,0,0.28)';ctx.beginPath();ctx.arc(0,0,e.size*0.44,0,Math.PI*2);ctx.fill();
   ctx.fillStyle='rgba(255,255,255,0.18)';ctx.beginPath();ctx.arc(0,0,e.size*0.22,0,Math.PI*2);ctx.fill();
-  // orbitantes
-  for(let i=0;i<4;i++){
-    const a=f*0.045+i*Math.PI/2;
-    ctx.fillStyle='rgba(255,255,255,0.55)';
-    ctx.beginPath();ctx.arc(Math.cos(a)*e.size*0.72,Math.sin(a)*e.size*0.72,4.5,0,Math.PI*2);ctx.fill();
-  }
+  for(let i=0;i<4;i++){const a=f*0.045+i*Math.PI/2;
+    ctx.fillStyle='rgba(255,255,255,0.55)';ctx.beginPath();ctx.arc(Math.cos(a)*e.size*0.72,Math.sin(a)*e.size*0.72,4.5,0,Math.PI*2);ctx.fill();}
 }
 
-// ═══════════════════════════════════════════
-// JOYSTICK
-// ═══════════════════════════════════════════
-const joyBase=document.getElementById('joyBase');
-const joyKnob=document.getElementById('joyKnob');
-const JR=30;
-function joyMove(tx,ty){
-  const rect=joyBase.getBoundingClientRect();
-  const cx=rect.left+rect.width/2,cy=rect.top+rect.height/2;
-  let dx=tx-cx,dy=ty-cy,d=Math.sqrt(dx*dx+dy*dy);
+// ═══════════════════════════
+// JOYSTICK — QUALQUER LUGAR DA TELA
+// ═══════════════════════════
+const joyBaseEl=document.getElementById('joyBase');
+const joyKnobEl=document.getElementById('joyKnob');
+const JR=38;
+let joyOx=0,joyOy=0,activeTId=null;
+const HW=joyBaseEl.offsetWidth/2||54;
+
+function setJoyPos(ox,oy){
+  joyBaseEl.style.left=(ox-HW)+'px';
+  joyBaseEl.style.top=(oy-HW)+'px';
+  joyBaseEl.style.opacity='1';
+}
+function moveKnob(tx,ty){
+  let dx=tx-joyOx,dy=ty-joyOy,d=Math.sqrt(dx*dx+dy*dy);
   if(d>JR){dx=dx/d*JR;dy=dy/d*JR;}
-  joyKnob.style.left=(rect.width/2+dx-22)+'px';
-  joyKnob.style.top=(rect.height/2+dy-22)+'px';
+  joyKnobEl.style.left=(HW+dx-24)+'px';
+  joyKnobEl.style.top=(HW+dy-24)+'px';
   if(G){G.joyDir.x=dx/JR;G.joyDir.y=dy/JR;}
 }
-function joyReset(){
-  joyKnob.style.left='28px';joyKnob.style.top='28px';
-  joyActive=false;if(G){G.joyDir.x=0;G.joyDir.y=0;}
+function resetJoy(){
+  joyBaseEl.style.left='16px';joyBaseEl.style.top=(H-124)+'px';joyBaseEl.style.opacity='0.38';
+  joyKnobEl.style.left=(HW-24)+'px';joyKnobEl.style.top=(HW-24)+'px';
+  joyActive=false;activeTId=null;if(G){G.joyDir.x=0;G.joyDir.y=0;}
 }
-joyBase.addEventListener('touchstart',e=>{e.preventDefault();joyActive=true;joyMove(e.touches[0].clientX,e.touches[0].clientY);},{passive:false});
-joyBase.addEventListener('touchmove',e=>{e.preventDefault();if(joyActive)joyMove(e.touches[0].clientX,e.touches[0].clientY);},{passive:false});
-joyBase.addEventListener('touchend',e=>{e.preventDefault();joyReset();},{passive:false});
-joyBase.addEventListener('mousedown',e=>{joyActive=true;joyMove(e.clientX,e.clientY);});
-window.addEventListener('mousemove',e=>{if(joyActive)joyMove(e.clientX,e.clientY);});
-window.addEventListener('mouseup',joyReset);
+// posição inicial
+resetJoy();
 
+const IGNORE_IDS=['muteBtn','startBtn','bossKillPanel','upgradePanel',
+  'startScreen','gameOverScreen','victoryScreen'];
+function shouldIgnore(target){
+  if(!target)return false;
+  if(target.classList&&(target.classList.contains('upCard')||target.classList.contains('btn')))return true;
+  if(target.closest)for(const id of IGNORE_IDS)if(target.closest('#'+id))return true;
+  return false;
+}
+
+document.addEventListener('touchstart',e=>{
+  if(activeTId!==null)return;
+  const touch=e.changedTouches[0];
+  if(shouldIgnore(e.target))return;
+  if(!G||G.paused||G.dead)return;
+  e.preventDefault();
+  activeTId=touch.identifier;joyActive=true;
+  joyOx=touch.clientX;joyOy=touch.clientY;
+  setJoyPos(joyOx,joyOy);moveKnob(joyOx,joyOy);
+},{passive:false});
+
+document.addEventListener('touchmove',e=>{
+  if(!joyActive||activeTId===null)return;
+  for(let i=0;i<e.changedTouches.length;i++){
+    if(e.changedTouches[i].identifier===activeTId){
+      e.preventDefault();moveKnob(e.changedTouches[i].clientX,e.changedTouches[i].clientY);break;
+    }
+  }
+},{passive:false});
+
+document.addEventListener('touchend',e=>{
+  for(let i=0;i<e.changedTouches.length;i++){if(e.changedTouches[i].identifier===activeTId){resetJoy();break;}}
+},{passive:false});
+document.addEventListener('touchcancel',e=>{
+  for(let i=0;i<e.changedTouches.length;i++){if(e.changedTouches[i].identifier===activeTId){resetJoy();break;}}
+},{passive:false});
+
+// mouse (PC)
+canvas.addEventListener('mousedown',e=>{
+  if(!G||G.paused||G.dead)return;
+  joyActive=true;joyOx=e.clientX;joyOy=e.clientY;
+  setJoyPos(joyOx,joyOy);moveKnob(joyOx,joyOy);
+});
+window.addEventListener('mousemove',e=>{if(joyActive)moveKnob(e.clientX,e.clientY);});
+window.addEventListener('mouseup',resetJoy);
+
+// teclado
 const keys={};
 window.addEventListener('keydown',e=>keys[e.key]=true);
 window.addEventListener('keyup',e=>keys[e.key]=false);
 setInterval(()=>{
-  if(!G||G.paused||G.dead) return;
+  if(!G||G.paused||G.dead)return;
   let x=0,y=0;
   if(keys['ArrowLeft']||keys['a']||keys['A'])x=-1;
   if(keys['ArrowRight']||keys['d']||keys['D'])x=1;
